@@ -1,0 +1,3129 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XHERO App - Tài Liệu Đặc Tả Nghiệp Vụ & Kỹ Thuật Admin Panel Upgrades</title>
+  <link rel="icon" type="image/png" href="./public/assets/images/logoLiveXhero.png">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts Outfit & Fira Code -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #f3f7fc;
+      color: #1e293b;
+    }
+
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+
+    .accent-blue-text {
+      color: #2563eb;
+    }
+
+    .accent-blue-bg {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    }
+
+    .soft-border {
+      border-color: #e2e8f0;
+    }
+
+    .card-premium {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .alert-tip {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      color: #14532d;
+    }
+
+    .alert-important {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      color: #1e3a8a;
+    }
+
+    .nav-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+    }
+
+    /* Sticky navigation active state */
+    .toc-item.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      border-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f3f7fc;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(37, 99, 235, 0.2);
+      border-radius: 9px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(37, 99, 235, 0.5);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Simulator Switch toggle styles */
+    .switch-toggle {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 20px;
+    }
+
+    .switch-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 20px;
+    }
+
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-toggle {
+      background-color: #2563eb;
+    }
+
+    input:checked + .slider-toggle:before {
+      transform: translateX(18px);
+    }
+
+    /* Phone Simulator layout mockup styling */
+    .mobile-frame {
+      border: 10px solid #1e293b;
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .mobile-notch {
+      width: 120px;
+      height: 18px;
+      background: #1e293b;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      margin: 0 auto;
+    }
+
+    /* Map simulation dynamic line flows */
+    @keyframes windflow {
+      0% {
+        stroke-dashoffset: 20;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .wind-line {
+      stroke: rgba(255, 255, 255, 0.25);
+      stroke-dasharray: 6, 12;
+      animation: windflow 4s linear infinite;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+  <!-- LIGHT THEME BRAND HEADER -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#e2e8f0] px-8 py-4 flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] flex items-center justify-center shadow-md shadow-[#2563eb]/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-lg font-bold tracking-tight text-[#0f172a] uppercase">Xhero Zone</span>
+          <span class="text-[9px] font-bold text-white bg-blue-600 px-2 py-0.5 rounded-full uppercase tracking-wider">ADMIN CONFIG</span>
+        </div>
+        <span class="text-[9px] text-[#64748B] uppercase tracking-widest block font-bold">Nâng Cấp Trải Nghiệm & Cấu Hình App</span>
+      </div>
+    </div>
+
+    <!-- DOCUMENT TABS SWITCHER -->
+    <div class="flex items-center gap-1.5 bg-[#f1f5f9] p-1 rounded-xl border border-slate-200/60 shadow-inner">
+      <button id="btn-tab-spec" onclick="toggleDocTab('spec')" class="px-5 py-2 rounded-lg text-xs font-bold transition-all bg-[#2563eb] text-white shadow-sm border border-[#2563eb]/10">
+        Tài Liệu Đặc Tả (BA Specification)
+      </button>
+      <button id="btn-tab-flow" onclick="toggleDocTab('flow')" class="px-5 py-2 rounded-lg text-xs font-bold transition-all text-[#64748b] hover:text-[#0f172a]">
+        Sơ đồ Vận hành (Flow nâng cấp)
+      </button>
+      <button id="btn-tab-preview" onclick="toggleDocTab('preview')" class="px-5 py-2 rounded-lg text-xs font-bold transition-all text-[#64748b] hover:text-[#0f172a]">
+        Giao Diện Tương Tác (Live Upgrade Simulator)
+      </button>
+    </div>
+
+    <div class="flex items-center gap-4 text-xs font-semibold text-[#64748B]">
+      <span>Phiên bản: <strong class="text-[#0f172a]">v2.5 (Full tabs spec & maps)</strong></span>
+      <span class="h-4 w-px bg-slate-200"></span>
+      <span>Soạn bởi: <strong class="text-[#2563eb]">Nguyễn Quốc Toàn</strong></span>
+    </div>
+  </header>
+
+  <!-- TAB 1: BA SPECIFICATION -->
+  <div id="doc-tab-spec" class="flex flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-8 py-8 gap-8 relative">
+
+    <!-- LEFT STICKY TABLE OF CONTENTS -->
+    <aside class="hidden lg:block w-[280px] shrink-0 sticky top-24 h-[calc(100vh-120px)] overflow-y-auto pr-2">
+      <div class="space-y-5">
+        <div>
+          <span class="text-xs font-bold text-[#2563eb] uppercase tracking-widest block mb-3 pl-1">Phân hệ Cấu hình (App Config)</span>
+          <nav class="space-y-1.5">
+            <a href="#section-1" class="toc-item nav-card active block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all">
+              1. Hiện trạng & Mục tiêu nâng cấp
+            </a>
+            <a href="#section-2" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              2. Đặc tả Cấu hình Tính năng đặc biệt
+            </a>
+            <a href="#section-3" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              3. Đặc tả Cấu hình Chung (Grouped)
+            </a>
+            <a href="#section-4" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              4. Đặc tả Tính năng nâng cao
+            </a>
+            <a href="#section-5" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              5. Đặc tả Danh mục Item app (Reordering)
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <span class="text-xs font-bold text-[#2563eb] uppercase tracking-widest block mb-3 pl-1">Phân hệ Tài nguyên (Resources)</span>
+          <nav class="space-y-1.5">
+            <a href="#section-6" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              6. Quản lý Bộ dữ liệu AI & La Kinh
+            </a>
+            <a href="#section-7" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              7. Đặc tả Banner & Kho Văn khấn
+            </a>
+            <a href="#section-8" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              8. Hệ thống Gia phả & Thư mục Icon
+            </a>
+            <a href="#section-9" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              9. Kho Từ khóa & Bản đồ gió Windy
+            </a>
+            <a href="#section-10" class="toc-item nav-card block pl-4 py-2.5 text-xs font-semibold rounded-xl border transition-all hover:bg-[#eff6ff] hover:text-[#2563eb]">
+              10. Thiết kế Cấu trúc Dữ liệu & APIs
+            </a>
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT WIDE CONTENT MAIN AREA -->
+    <main class="flex-1 space-y-16 overflow-x-hidden pb-24">
+
+      <!-- HERO TITLE -->
+      <section class="text-center md:text-left space-y-4 border-b border-slate-200 pb-10">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-[#2563eb] px-3 py-1 bg-[#eff6ff] rounded-full w-max inline-block">ĐẶC TẢ NÂNG CẤP HỆ THỐNG XHERO ADMIN</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0f172a] leading-tight">
+          NÂNG CẤP TOÀN DIỆN PHÂN HỆ CẤU HÌNH & TÀI NGUYÊN APP
+        </h2>
+        <p class="text-sm text-[#64748b] max-w-4xl leading-relaxed">
+          Tài liệu đặc tả nghiệp vụ cải tiến giao diện người dùng, sắp xếp lưới menu thông minh, gán phím tắt hệ thống, và quản lý toàn diện 10 loại tài nguyên phong thủy chuyên sâu hỗ trợ chatbot AI Mạnh của Xhero App.
+        </p>
+      </section>
+
+      <!-- SECTION 1: OBJECTIVES -->
+      <section id="section-1" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          1. Hiện trạng & Mục tiêu nâng cấp (Current State & Objectives)
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-3">
+              <strong class="text-xs text-red-600 uppercase tracking-wider block flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>Hiện trạng Hệ thống cũ (Pain Points)</strong>
+              <ul class="text-xs text-[#475569] space-y-2 list-disc list-inside">
+                <li><strong>Giao diện cấu hình phẳng:</strong> 16 tham số hệ thống trải dài thành một trang danh sách thô, tăng nguy cơ bấm sửa đổi nhầm.</li>
+                <li><strong>Thiếu cơ chế duyệt App Store an toàn:</strong> Không thể ẩn tạm thời các tính năng gieo quẻ/tâm linh khi Apple thực hiện review app.</li>
+                <li><strong>Quản lý phím tắt tĩnh:</strong> Thứ tự 18 tiện ích ngoài Home App học viên cố định, không thể tùy chọn kéo thả hoán vị.</li>
+                <li><strong>Đồng bộ bản đồ thời tiết phức tạp:</strong> Các tọa độ vùng gió (Windy map) lưu dữ liệu text rời rạc, không có giao diện trực quan hóa.</li>
+              </ul>
+            </div>
+
+            <div class="space-y-3">
+              <strong class="text-xs text-green-600 uppercase tracking-wider block flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>Mục tiêu Nâng cấp UX Mới (UX Objectives)</strong>
+              <ul class="text-xs text-[#475569] space-y-2 list-disc list-inside">
+                <li><strong>Gom nhóm card cấu hình:</strong> Chia nhỏ thành 5 nhóm chuyên nghiệp: Tài chính, Bảo mật, AI & Chatbot, UI/UX, AppStore Review.</li>
+                <li><strong>Interactive Drag & Drop Simulator:</strong> Cung cấp bảng sắp xếp menu kèm mock di động bên cạnh tự thay đổi thời gian thực.</li>
+                <li><strong>Chế độ AppStore Review tự động:</strong> Bật nút switch đỏ để lập tức ẩn các modul phong thủy nhạy cảm qua WebSockets/Silent Push.</li>
+                <li><strong>Bản đồ Windy tương tác trực quan:</strong> Nhúng bản đồ động, cho phép chọn tọa độ và nhập thông số gió (knots/hướng) trực tiếp tại điểm pin.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: SPECIAL FEATURES -->
+      <section id="section-2" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          2. Đặc tả Cấu hình Tính năng đặc biệt (Special Features Configuration)
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6">
+          <p class="text-xs text-[#64748b] leading-relaxed">
+            Nơi quản lý các gói quà tặng, chiến dịch kích hoạt nổi bật theo mùa (Ví dụ: Ưu đãi Lễ hội đền Trần, Bát tự cuối năm...). Các tính năng này được kích hoạt tự động theo thời hạn (30, 90 ngày) và có tùy biến phân quyền tiếp cận cho học viên.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION 3: GENERAL SETTINGS -->
+      <section id="section-3" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          3. Đặc tả Cấu hình Chung (General Settings Categorization)
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6">
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569] bg-white">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-[#0f172a] font-bold">
+                  <th class="p-3 pl-4">Nhóm Cấu hình</th>
+                  <th class="p-3">Tham số thuộc nhóm (Screenshot 2)</th>
+                  <th class="p-3">Quy luật Validation kỹ thuật</th>
+                  <th class="p-3">Giải pháp Giao diện nâng cấp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                  <td class="p-3 pl-4 font-bold text-[#2563eb]">1. Tài chính & Xu (Finance)</td>
+                  <td class="p-3 font-mono">
+                    - Cấu hình xu cho tính năng gửi thiệp<br>
+                    - Cấu hình xu mặc định khi đăng ký<br>
+                    - Cấu hình phí cho gian hàng và đơn hàng<br>
+                    - Cấu hình phí hệ thống...
+                  </td>
+                  <td class="p-3">
+                    Số xu &ge; 0, định dạng số nguyên.<br>
+                    Tỷ lệ phần trăm phí: 0.00% - 100.00%.
+                  </td>
+                  <td class="p-3 text-slate-600">
+                    Sử dụng input dạng số có hậu tố đơn vị (xu, %) kèm theo cảnh báo nếu phí vượt quá 20% (mức trần quy định).
+                  </td>
+                </tr>
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                  <td class="p-3 pl-4 font-bold text-[#2563eb]">2. Bảo mật & Hệ thống (Security)</td>
+                  <td class="p-3 font-mono">
+                    - Thời gian OTP hết hạn<br>
+                    - Cấu hình link cho QR cũ
+                  </td>
+                  <td class="p-3">
+                    Thời gian OTP: 60s - 600s.<br>
+                    QR Link: Bắt buộc định dạng URL hợp lệ.
+                  </td>
+                  <td class="p-3 text-slate-600">
+                    Input hẹn giờ có thanh trượt kéo chọn (slider) và nút kích hoạt thủ công tác vụ.
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-50/50">
+                  <td class="p-3 pl-4 font-bold text-[#2563eb]">3. Trạng thái kiểm duyệt (AppStore Mode)</td>
+                  <td class="p-3 font-mono">
+                    - Cấu hình hiển thị dữ liệu khi ứng dụng trên AppStore đang được review
+                  </td>
+                  <td class="p-3">
+                    Boolean: Bật (Reviewing) | Tắt (Normal).
+                  </td>
+                  <td class="p-3 text-slate-600">
+                    Nút chuyển trạng thái switch màu đỏ nổi bật. Có ghi chú cảnh báo hệ quả ẩn toàn bộ tính năng gieo quẻ trên thiết bị iOS.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: ADVANCED FEATURES -->
+      <section id="section-4" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          4. Đặc tả Tính năng nâng cao & Phân quyền Truy cập (Advanced Features & Access Authorization)
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6 text-xs text-[#475569]">
+          <p class="text-xs text-[#64748b] leading-relaxed">
+            Thiết lập trạng thái hoạt động (Hoạt động / Tạm khóa) và phân quyền truy cập mặc định cho toàn bộ người dùng thông thường hoặc cấu hình đặc quyền cho tài khoản Wishlist (VIP) đối với các modul lớn như Phong thủy quản trị, Windy-map, Xhero Scan, Kỳ môn âm bàn... Hệ thống không sử dụng cơ chế thu phí trực tiếp mà kiểm soát quyền qua cơ chế đồng bộ phân quyền từ Admin.
+          </p>
+          
+          <div class="border-t border-slate-100 pt-4 space-y-3">
+            <span class="text-xs font-bold text-[#2563eb] uppercase tracking-wider block">4.1. Cấu hình Quyền nâng cao với Wishlist (VIP) Account</span>
+            <ul class="space-y-2 list-disc list-inside text-[11px] leading-relaxed">
+              <li><strong>Hành động:</strong> Chỉ định và phân bổ đặc quyền truy cập các tính năng nâng cao cho các tài khoản Wishlist (VIP) không giới hạn thời gian.</li>
+              <li><strong>Đối tượng tác động:</strong> Các số điện thoại học viên/đối tác được Admin gắn cờ VIP và cấp full quyền nâng cao hoặc gán cụ thể từng modul riêng biệt.</li>
+              <li><strong>Mục tiêu nghiệp vụ:</strong> 
+                Quản lý danh sách các tài khoản được gắn cờ <code>isVIP: true</code>. Hệ thống cung cấp bảng quản trị để gán nhanh trạng thái VIP, tìm kiếm theo tên/SĐT và tùy chỉnh quyền chi tiết (Full quyền hoặc chỉ bật một vài modul cụ thể).
+              </li>
+            </ul>
+          </div>
+
+          <div class="border-t border-slate-100 pt-4 space-y-3">
+            <span class="text-xs font-bold text-[#2563eb] uppercase tracking-wider block">4.2. Cấu hình Quyền truy cập thời hạn cho toàn bộ User thường (Campaign / Sự kiện)</span>
+            <ul class="space-y-2 list-disc list-inside text-[11px] leading-relaxed">
+              <li><strong>Hành động:</strong> Cho phép mở khóa một hoặc một vài tính năng nâng cao nhất định cho toàn bộ học viên thông thường trong một thời hạn xác định (ví dụ: mở dùng thử la bàn 3 tháng).</li>
+              <li><strong>Đối tượng tác động:</strong> Tất cả tài khoản học viên thông thường (<code>isVIP: false</code>) trên hệ thống.</li>
+              <li><strong>Cơ chế tự động thu hồi (Expiration Revert):</strong> 
+                Admin cấu hình trạng thái của modul là <code>Cho phép (Thời hạn)</code> kèm theo Ngày hết hạn (<code>expiryDate</code>). Khi thời gian hệ thống vượt quá ngày cấu hình này, quyền truy cập của toàn bộ user thường đối với modul đó sẽ tự động bị thu hồi về trạng thái <code>Không cho phép</code> mà không cần Admin thao tác thủ công.
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl space-y-2">
+            <strong class="text-blue-800 text-xs block">Quy tắc Phân quyền Hệ thống (System Authorization Logic):</strong>
+            <p class="text-[11px] leading-relaxed text-blue-900">
+              - <strong>Nếu <code>isVIP === true</code>:</strong> Bypass hoàn toàn cấu hình mặc định của user thường. Kiểm tra mảng quyền tùy chỉnh <code>customPermissions</code>. Nếu chứa <code>["ALL"]</code> hoặc mảng rỗng, cấp quyền truy cập vĩnh viễn toàn bộ tính năng. Nếu chứa mã cụ thể (ví dụ: <code>["windy-map"]</code>), chỉ cấp quyền sử dụng các modul tương ứng.<br>
+              - <strong>Nếu <code>isVIP === false</code>:</strong> Đối với mỗi modul tính năng, hệ thống kiểm tra trạng thái uỷ quyền mặc định:
+              <span class="block pl-3 mt-1 text-[10px] text-blue-800">
+                + <code>Cho phép (Vĩnh viễn)</code>: Mọi user thường đều truy cập được.<br>
+                + <code>Cho phép (Thời hạn)</code>: Chỉ cho phép truy cập nếu Ngày hiện tại &le; <code>expiryDate</code> cấu hình. Nếu lớn hơn, báo lỗi từ chối truy cập.<br>
+                + <code>Không cho phép</code>: Bị chặn truy cập mặc định (trừ phi user đó được nâng cấp VIP riêng).
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: APP MENU ITEMS -->
+      <section id="section-5" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          5. Đặc tả Danh mục Item App & Luồng Sắp Xếp (App Menu Reordering)
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6 text-xs text-[#475569]">
+          <p class="leading-relaxed mb-4">
+            Lưới phím tắt trang chủ gồm 18 danh mục (La Kinh, Xem Ngày, Đào Tạo, Gia Phả...). Hệ thống nâng cấp cho phép Admin hoán vị thứ tự bằng nút bấm lên/xuống.
+          </p>
+          <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl">
+            <strong class="text-blue-800 block">Đồng bộ sortOrder:</strong>
+            <p class="text-[11px] leading-relaxed text-blue-900 mt-1">
+              Thứ tự hiển thị được liên kết trực tiếp với chỉ số <code>sortOrder</code> trong cơ sở dữ liệu. Thiết bị học viên khi tải trang chủ sẽ gọi API <code>GET /api/app/menu-items</code> và sắp xếp lưới tiện ích theo thứ tự tăng dần của chỉ số này.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: AI DATASET & LA KINH -->
+      <section id="section-6" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          6. Đặc tả Bộ dữ liệu AI & Luận giải La kinh theo Hướng Gió
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6 text-xs text-[#475569] space-y-4">
+          <p class="leading-relaxed text-[#64748b]">
+            Quản trị viên soạn thảo các hướng dẫn học thuyết (Bộ dữ liệu AI) bằng trình viết Markdown và phân phối các bài luận giải địa lý liên kết với hướng gió la kinh.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+              <strong class="text-slate-800 block">Bộ dữ liệu AI (Screenshot 5)</strong>
+              <p class="text-[11px] text-slate-500">Bài viết hướng dẫn học viên gieo quẻ, xem ngày, quét Xhero Scan. Lưu vết tài khoản Admin tạo lập qua số điện thoại định danh.</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+              <strong class="text-slate-800 block">Luận giải La Kinh theo hướng gió (Screenshot 6)</strong>
+              <p class="text-[11px] text-slate-500">Các tài liệu giải nghĩa (Sứ mệnh ban lãnh đạo, nhân sự, dòng tiền) tương ứng với 8 hướng la bàn phong thủy (Đông, Tây Bắc, Tây Nam, v.v.).</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: BANNERS & PRAYERS -->
+      <section id="section-7" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          7. Đặc tả Quản lý Banner & Thư viện Văn khấn Cổ truyền
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6 text-xs text-[#475569]">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <strong class="text-slate-800 block">Quản lý Banners (Screenshot 7)</strong>
+              <p class="text-[11px] leading-relaxed text-[#64748b]">
+                Hệ thống nạp danh sách hình ảnh banner quảng cáo trượt ngoài trang chủ. Hỗ trợ thiết lập vị trí hiển thị, độ ưu tiên sắp xếp (1-10), ngôn ngữ (Tiếng Việt/Tiếng Anh) và thời hạn chạy chương trình truyền thông (Tự động ẩn khi hết hạn).
+              </p>
+            </div>
+            <div class="space-y-2">
+              <strong class="text-slate-800 block">Thư viện Văn khấn (Screenshot 8)</strong>
+              <p class="text-[11px] leading-relaxed text-[#64748b]">
+                Thư mục lưu trữ các bài cúng cổ truyền. Hỗ trợ theo dõi lượt xem (views) của học viên, phân nhóm danh mục nghi lễ và gắn thẻ nhãn đề xuất nổi bật.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: GENEALOGIES & ICONS -->
+      <section id="section-8" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          8. Đặc tả Hệ thống Quản lý Gia phả & Thư mục Icon Tài nguyên
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6 text-xs text-[#475569]">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+              <strong class="text-slate-800 block">Thẻ Gia phả số (Screenshot 10)</strong>
+              <p class="text-[11px] text-slate-500">Hiển thị các dòng họ đã đăng ký của học viên dưới dạng lưới (Grid Card). Quản lý người đại diện, số thành viên và địa chỉ từ đường dòng họ.</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+              <strong class="text-slate-800 block">Mẫu ảnh gia phả (Screenshot 11)</strong>
+              <p class="text-[11px] text-slate-500">Cài đặt các mẫu khung tên, khung ảnh cụ tổ và khung phả hệ cho học viên lựa chọn để in ấn phả đồ dòng họ.</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+              <strong class="text-slate-800 block">Thư mục Icon (Screenshot 12)</strong>
+              <p class="text-[11px] text-slate-500">Lưu trữ biểu tượng hệ thống (zalo, thông báo erp, email, background scroll) được liên kết qua từ khóa định danh.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 9: KEYWORDS & WINDY MAP -->
+      <section id="section-9" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          9. Đặc tả Kho Từ khóa Hệ thống & Bản đồ gió Windy
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6 text-xs text-[#475569]">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <strong class="text-slate-800 block">Quản lý Từ khóa (Screenshot 13)</strong>
+              <p class="text-[11px] leading-relaxed text-[#64748b]">
+                Gồm hai danh mục: <strong>Từ khóa cấm</strong> (lọc nội dung bài viết, chặn chatbot trả lời chính trị/cờ bạc) và <strong>Từ khóa tìm kiếm</strong> (phím tắt từ khóa nhanh cho người dùng tra cứu văn khấn: van-khan-tet-han-thuc, van-khan-le-chua...).
+              </p>
+            </div>
+            <div class="space-y-2">
+              <strong class="text-slate-800 block">Bản đồ gió Windy (Screenshot 14)</strong>
+              <p class="text-[11px] leading-relaxed text-[#64748b]">
+                Giao diện bản đồ thời tiết thời gian thực được nhúng trực tiếp qua Iframe Windy API. Quản trị viên đánh dấu tọa độ vùng gió (ví dụ: Đồng Xoài), cấu hình vận tốc gió (knots) và hướng gió thịnh hành để xuất dữ liệu dự báo phong thủy vùng khí.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 10: DATA STRUCTURES & APIS -->
+      <section id="section-10" class="space-y-6 scroll-mt-24">
+        <h3 class="text-base font-bold text-[#0f172a] uppercase tracking-wider border-l-4 border-[#2563eb] pl-3">
+          10. Thiết kế Cấu trúc Dữ liệu JSON & APIs Nâng cấp
+        </h3>
+
+        <div class="card-premium rounded-2xl p-6 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+            <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white">POST</span>
+                <span class="font-mono font-bold text-slate-800">/api/admin/windy/update-coordinate</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Cập nhật vận tốc và hướng gió tại một tọa độ được ghim.</p>
+              <pre class="bg-white border border-slate-200 rounded p-3 text-[10px] font-mono text-gray-700">
+{
+  "locationName": "Đồng Xoài",
+  "windSpeedKnots": 3,
+  "windDirection": "Nam",
+  "timestamp": "2026-06-11T13:00:00Z"
+}</pre>
+            </div>
+
+            <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-black">PUT</span>
+                <span class="font-mono font-bold text-slate-800">/api/admin/keywords/ban-word</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Thêm từ khóa cấm lọc chặn chatbot Mạnh AI.</p>
+              <pre class="bg-white border border-slate-200 rounded p-3 text-[10px] font-mono text-gray-700">
+{
+  "word": "cờ bạc",
+  "category": "banned",
+  "action": "block_response"
+}</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- TAB 2: FLOW OVERVIEW -->
+  <div id="doc-tab-flow" class="hidden flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-8 py-8 space-y-8">
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold text-[#0f172a] tracking-tight">Sơ đồ Luồng vận hành Nâng cấp</h2>
+      <p class="text-sm text-[#64748B] mt-1">Sơ đồ quy trình đồng bộ hóa dữ liệu từ thao tác Admin đến giao diện ứng dụng của học viên.</p>
+    </div>
+
+    <!-- Flowchart 1 -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm overflow-x-auto">
+      <div class="space-y-6 min-w-[950px]">
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">Luồng 1 — Kéo thả sắp xếp & Cập nhật thứ tự phím tắt trang chủ</span>
+          <div class="h-px bg-slate-200 flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4 text-xs text-[#475569]">
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">1. Thay đổi thứ tự (UI)</span>
+            <p class="text-[11px] text-slate-500">Admin nhấn ▲▼ hoán đổi vị trí các phím tắt trong bảng quản trị.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">2. Gửi mảng sắp xếp</span>
+            <p class="text-[11px] text-slate-500">Bấm "Lưu thứ tự", gửi API danh sách ID đã hoán đổi lên máy chủ.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">3. Cập nhật sortOrder DB</span>
+            <p class="text-[11px] text-slate-500">Backend ghi đè hàng loạt trường sortOrder trong bảng dữ liệu SQL.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">4. Làm mới học viên</span>
+            <p class="text-[11px] text-slate-500">App di động tự động gọi API lấy danh sách phím tắt mới theo sortOrder.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flowchart 2 -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm overflow-x-auto">
+      <div class="space-y-6 min-w-[950px]">
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-600 bg-teal-50 px-3 py-1 rounded-full border border-teal-100">Luồng 2 — Lưu trữ tọa độ & Dự báo thời tiết phong thủy vùng khí Windy</span>
+          <div class="h-px bg-slate-200 flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4 text-xs text-[#475569]">
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">1. Chọn tọa độ bản đồ</span>
+            <p class="text-[11px] text-slate-500">Admin ghim một điểm nút địa điểm trên bản đồ Windy Simulator.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">2. Cấu hình vận tốc & hướng</span>
+            <p class="text-[11px] text-slate-500">Điền số knots, chọn hướng thổi gió chính của khu vực đó.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">3. Đồng bộ Windy API</span>
+            <p class="text-[11px] text-slate-500">Lưu dữ liệu, máy chủ truyền thông tin sang Windy API map layer.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">4. Xuất báo cáo khí</span>
+            <p class="text-[11px] text-slate-500">Học viên bật tab Windy ngoài app di động sẽ xem được mô phỏng dòng khí động.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flowchart 3 -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm overflow-x-auto">
+      <div class="space-y-6 min-w-[950px]">
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#2563eb] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">Luồng 3 — Thiết lập cấu hình quyền nâng cao & Đồng bộ Wishlist (VIP) Account</span>
+          <div class="h-px bg-slate-200 flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-5 gap-4 text-xs text-[#475569]">
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">1. Tìm kiếm & Bật cờ isVIP</span>
+            <p class="text-[11px] text-slate-500">Admin tìm kiếm SĐT học viên, bật flag isVIP và cấu hình danh sách quyền.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">2. Ghi đè DB & Xoá Cache</span>
+            <p class="text-[11px] text-slate-500">Hệ thống lưu bản ghi DB, xoá Redis Cache token cũ để bắt buộc cập nhật session.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">3. Yêu cầu kiểm tra quyền</span>
+            <p class="text-[11px] text-slate-500">Học viên khởi chạy app di động, gửi API kiểm tra trạng thái uỷ quyền hiện tại.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">4. Backend Verify Auth</span>
+            <p class="text-[11px] text-slate-500">Middleware kiểm tra flag isVIP, trả về customPermissions bypass IAP checkout.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-1">
+            <span class="font-bold text-[#0f172a] block">5. Client Mở khoá tính năng</span>
+            <p class="text-[11px] text-slate-500">App di động căn cứ danh sách quyền trả về, ẩn/hiển thị nút chức năng VIP tương ứng.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: INTERACTIVE PREVIEW (LIVE UPGRADE SIMULATOR) -->
+  <div id="doc-tab-preview" class="hidden flex-1 flex overflow-hidden h-[calc(100vh-73px)] w-full bg-[#f3f7fc]">
+    
+    <!-- LEFT SIDEBAR SIMULATOR NAVIGATION -->
+    <div class="w-[280px] shrink-0 border-r border-[#e2e8f0] bg-white p-5 flex flex-col justify-between overflow-y-auto h-full text-xs">
+      <div class="space-y-6">
+        <div class="flex items-center gap-2.5 pb-4 border-b border-slate-100">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+            XZ
+          </div>
+          <div>
+            <span class="font-bold text-slate-800 block text-xs uppercase tracking-wider">Xherozone Admin</span>
+            <span class="text-[10px] text-zinc-400 font-semibold block uppercase">Cấu hình hệ thống</span>
+          </div>
+        </div>
+
+        <div>
+          <span class="text-zinc-500 font-extrabold uppercase tracking-widest block mb-2 text-[10px]">CÀI ĐẶT CẤU HÌNH</span>
+          <nav class="space-y-1">
+            <button onclick="setUpgradeTab('features')" id="btn-up-tab-features" class="w-full text-left px-3 py-2.5 rounded-xl border border-blue-500 bg-blue-50 text-blue-600 font-bold flex items-center gap-2.5 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.371 1.24.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.178 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.97-2.883c-.783-.57-.372-1.81.588-1.81h4.907a1 1 0 00.95-.69l1.519-4.674z"></path></svg>
+              Tính năng đặc biệt
+            </button>
+            <button onclick="setUpgradeTab('general')" id="btn-up-tab-general" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+              Cấu hình Chung
+            </button>
+            <button onclick="setUpgradeTab('advanced')" id="btn-up-tab-advanced" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              Tính năng nâng cao
+            </button>
+            <button onclick="setUpgradeTab('vipaccounts')" id="btn-up-tab-vipaccounts" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              Tài khoản VIP & Phân quyền
+            </button>
+            <button onclick="setUpgradeTab('items')" id="btn-up-tab-items" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+              Danh mục Item app
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <span class="text-zinc-500 font-extrabold uppercase tracking-widest block mb-2 text-[10px]">TÀI NGUYÊN HỌC THUẬT</span>
+          <nav class="space-y-1">
+            <button onclick="setUpgradeTab('resources')" id="btn-up-tab-resources" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+              Bộ dữ liệu AI
+            </button>
+            <button onclick="setUpgradeTab('lakinh')" id="btn-up-tab-lakinh" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              Luận giải La kinh
+            </button>
+            <button onclick="setUpgradeTab('banners')" id="btn-up-tab-banners" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Quản lý Banners
+            </button>
+            <button onclick="setUpgradeTab('prayers')" id="btn-up-tab-prayers" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13"></path></svg>
+              Bài viết Văn khấn
+            </button>
+            <button onclick="setUpgradeTab('prayercats')" id="btn-up-tab-prayercats" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              Thể loại Văn khấn
+            </button>
+            <button onclick="setUpgradeTab('genealogies')" id="btn-up-tab-genealogies" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+              Quản lý Gia phả
+            </button>
+            <button onclick="setUpgradeTab('genealogytemplates')" id="btn-up-tab-genealogytemplates" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+              Mẫu ảnh gia phả
+            </button>
+            <button onclick="setUpgradeTab('icons')" id="btn-up-tab-icons" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+              Thư viện Icons
+            </button>
+            <button onclick="setUpgradeTab('keywords')" id="btn-up-tab-keywords" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Từ khóa tìm kiếm
+            </button>
+            <button onclick="setUpgradeTab('windmap')" id="btn-up-tab-windmap" class="w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg>
+              Bản đồ gió Windy
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- SIMULATOR ACCOUNT INFO -->
+      <div class="pt-4 border-t border-slate-200">
+        <div class="flex items-center gap-2 bg-[#f8fafc] border border-slate-200/60 p-3 rounded-xl">
+          <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
+            QT
+          </div>
+          <div>
+            <span class="font-bold text-slate-800 block text-[11px] leading-tight">Nguyễn Quốc Toàn</span>
+            <span class="text-[9px] text-zinc-400 font-bold block uppercase tracking-wider">Quản trị cấp cao</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN SIMULATOR SCREEN -->
+    <div class="flex-1 bg-white p-6 overflow-y-auto flex flex-col justify-between h-full relative">
+      
+      <!-- SIMULATOR HEAD PANEL -->
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></div>
+          <span class="text-xs font-bold text-slate-800" id="sim-current-view-title">Tổng quan / Cấu hình - Tính năng đặc biệt</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="relative cursor-pointer">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          </div>
+          <span class="text-[9px] text-zinc-500 font-extrabold uppercase tracking-wider bg-slate-100 px-2.5 py-1 rounded">Xhero zone simulator v2.5</span>
+        </div>
+      </div>
+
+      <!-- SIMULATOR DYNAMIC WORKSPACE CONTENT -->
+      <div class="flex-1 overflow-y-auto min-h-0 text-xs text-left" id="sim-workspace-body">
+        
+        <!-- 1. Tab: Tính năng đặc biệt -->
+        <div id="sim-panel-features" class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+              <input type="text" id="search-feature" oninput="filterSpecialFeatures()" placeholder="Tìm tính năng đặc biệt..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-48 text-[11px]">
+              <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none text-[11px]"><option>Hoạt động</option><option>Tạm khóa</option></select>
+            </div>
+            <button onclick="addSimSpecialFeature()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              Thêm tính năng
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">LOẠI TÍNH NĂNG</th>
+                  <th class="p-3">KEY</th>
+                  <th class="p-3">THỜI HẠN</th>
+                  <th class="p-3">TRẠNG THÁI</th>
+                  <th class="p-3">NGÀY TẠO</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-features">
+                <!-- Features rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Tab: Cấu hình Chung -->
+        <div id="sim-panel-general" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <input type="text" id="sim-search-general" oninput="filterGeneralConfigs()" placeholder="Tìm kiếm nhanh cấu hình..." class="bg-white border border-slate-200 rounded-lg px-3 py-2 focus:outline-none w-full max-w-sm text-[11px]">
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sim-container-general">
+            <!-- General configurations grouped -->
+          </div>
+        </div>
+
+        <!-- 3. Tab: Tính năng nâng cao -->
+        <div id="sim-panel-advanced" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <input type="text" id="search-adv" oninput="filterAdvancedFeatures()" placeholder="Tìm tính năng nâng cao..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-48 text-[11px]">
+            <button onclick="addSimAdvancedFeature()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              Thêm nâng cao
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">TÊN TÍNH NĂNG NÂNG CAO</th>
+                  <th class="p-3">KEY ĐỊNH DANH</th>
+                  <th class="p-3">ỦY QUYỀN MẶC ĐỊNH</th>
+                  <th class="p-3">TRẠNG THÁI</th>
+                  <th class="p-3">NGÀY TẠO</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-advanced">
+                <!-- Advanced features dynamic -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 3.5. Tab: Tài khoản VIP & Phân quyền -->
+        <div id="sim-panel-vipaccounts" class="hidden space-y-6">
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div class="xl:col-span-2 space-y-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-sm font-bold text-slate-800">Danh sách tài khoản Wishlist (VIP)</h4>
+                  <p class="text-[10px] text-slate-500">Các tài khoản được phân bổ toàn bộ hoặc một số quyền nâng cao đặc thù.</p>
+                </div>
+                <button onclick="addSimVipAccount()" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5 text-[11px]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+                  Thêm tài khoản VIP
+                </button>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <input type="text" id="search-vip" oninput="filterVipAccounts()" placeholder="Tìm theo Tên hoặc SĐT..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-full text-[11px]">
+              </div>
+
+              <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+                <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+                  <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                      <th class="p-3 pl-4">NGƯỜI DÙNG</th>
+                      <th class="p-3">SỐ ĐIỆN THOẠI</th>
+                      <th class="p-3">TRẠNG THÁI VIP</th>
+                      <th class="p-3">QUYỀN ĐƯỢC PHÂN BỔ</th>
+                      <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sim-table-body-vipaccounts">
+                    <!-- Dynamic VIP accounts row rendering -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="space-y-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+              <div>
+                <h4 class="text-sm font-bold text-slate-800">Quyền mặc định của User khác</h4>
+                <p class="text-[10px] text-slate-500">Cấu hình quyền mặc định cho các tài khoản không thuộc danh sách VIP (isVIP = false).</p>
+              </div>
+
+              <div class="space-y-3 pt-2" id="sim-default-users-permissions">
+                <!-- Dynamic default permission rendering -->
+              </div>
+              
+              <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button onclick="saveDefaultPermissions()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 text-[11px]">
+                  Lưu cấu hình mặc định
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Tab: Danh mục Item app (Reorder & Phone view splitter) -->
+        <div id="sim-panel-items" class="hidden grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+          <div class="xl:col-span-7 space-y-4">
+            <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-3 rounded-xl">
+              <span class="text-slate-600 font-semibold block text-[11px]">Lưu ý: Kích chuột ▲ ▼ để di chuyển thứ tự phím tắt và cập nhật DB sortOrder.</span>
+              <button onclick="addSimMenuItem()" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-[10px] flex items-center gap-1">
+                + Thêm phím tắt
+              </button>
+            </div>
+
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm">
+              <div class="bg-slate-50 border-b border-slate-200 p-3 font-bold text-slate-800 grid grid-cols-12 text-[10px]">
+                <div class="col-span-1 pl-1">STT</div>
+                <div class="col-span-5">TÊN TIỆN ÍCH MENU</div>
+                <div class="col-span-2 text-center">ICON</div>
+                <div class="col-span-4 text-center">HÀNH ĐỘNG</div>
+              </div>
+              <div id="sim-list-app-items" class="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
+                <!-- App items dynamic -->
+              </div>
+            </div>
+          </div>
+
+          <div class="xl:col-span-5 flex justify-center">
+            <div class="mobile-frame w-[290px] h-[520px] bg-slate-50 flex flex-col overflow-hidden relative">
+              <div class="mobile-notch"></div>
+              
+              <div class="px-4 py-2 border-b border-slate-200 bg-white flex items-center justify-between">
+                <span class="text-[10px] font-extrabold text-blue-600 tracking-tight">XHERO ZONE APP</span>
+                <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+              </div>
+
+              <div class="flex-1 overflow-y-auto p-3 space-y-3">
+                <div class="w-full h-24 bg-gradient-to-r from-red-500 to-amber-500 rounded-xl p-3 flex flex-col justify-between text-white shadow-inner">
+                  <span class="text-[9px] font-bold tracking-wider bg-white/20 px-1.5 py-0.5 rounded w-max">LIVESTREAM</span>
+                  <div class="space-y-0.5">
+                    <strong class="text-xs block font-bold truncate">Khoá học An Lạc 2026</strong>
+                    <span class="text-[8px] opacity-90 block">Xem thầy Mạnh giảng Bát tự</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between px-1">
+                  <span class="text-[10px] font-bold text-slate-800">Tiện ích phong thủy</span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2" id="sim-mobile-grid-container">
+                  <!-- Injected from JS based on order list -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Tab: Tài nguyên & Dữ liệu AI -->
+        <div id="sim-panel-resources" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+              <input type="text" id="sim-search-resource" oninput="filterResources()" placeholder="Tìm tài nguyên hướng dẫn..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-48 text-[11px]">
+            </div>
+            <button onclick="addSimResource()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              Thêm dữ liệu
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">TIÊU ĐỀ BÀI VIẾT HƯỚNG DẪN</th>
+                  <th class="p-3">LOẠI</th>
+                  <th class="p-3">TRẠNG THÁI</th>
+                  <th class="p-3">NGƯỜI TẠO</th>
+                  <th class="p-3">NGÀY TẠO</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-resources">
+                <!-- Resources dynamic -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6. Tab: Luận giải La Kinh -->
+        <div id="sim-panel-lakinh" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <select id="filter-lakinh-wind" onchange="filterLaKinh()" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none text-[11px]">
+              <option value="">Tất cả hướng gió</option>
+              <option value="Đông">Đông</option>
+              <option value="Tây">Tây</option>
+              <option value="Nam">Nam</option>
+              <option value="Bắc">Bắc</option>
+              <option value="Tây Bắc">Tây Bắc</option>
+              <option value="Tây Nam">Tây Nam</option>
+              <option value="Đông Bắc">Đông Bắc</option>
+              <option value="Đông Nam">Đông Nam</option>
+            </select>
+            <button onclick="addSimLaKinh()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              + Luận giải
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">TIÊU ĐỀ LUẬN GIẢI</th>
+                  <th class="p-3">HƯỚNG GIÓ LÊN</th>
+                  <th class="p-3">TRẠNG THÁI</th>
+                  <th class="p-3">NGÀY TẠO</th>
+                  <th class="p-3">TẠO BỞI</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-lakinh">
+                <!-- La Kinh dynamic -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. Tab: Banner truyền thông -->
+        <div id="sim-panel-banners" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <input type="text" id="search-banner" oninput="filterBanners()" placeholder="Tìm tiêu đề hoặc link banner..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-64 text-[11px]">
+            <button onclick="addSimBanner()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              + Thêm Banner
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">BANNER / LIÊN KẾT HÌNH ẢNH</th>
+                  <th class="p-3">VỊ TRÍ</th>
+                  <th class="p-3">NGÔN NGỮ</th>
+                  <th class="p-3 text-center">ƯU TIÊN</th>
+                  <th class="p-3">TRẠNG THÁI</th>
+                  <th class="p-3">THỜI HẠN</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-banners">
+                <!-- Banners dynamic -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 8. Tab: Văn khấn -->
+        <div id="sim-panel-prayers" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+              <input type="text" id="search-prayer" oninput="filterPrayers()" placeholder="Tìm tên văn khấn..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-48 text-[11px]">
+            </div>
+            <button onclick="addSimPrayer()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              + Văn khấn
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">TIÊU ĐỀ VĂN KHẤN TÂM LINH</th>
+                  <th class="p-3">THỂ LOẠI</th>
+                  <th class="p-3 text-center">SỐ LƯỢT XEM</th>
+                  <th class="p-3">PHỔ BIẾN</th>
+                  <th class="p-3">TRẠNG THÁI</th>
+                  <th class="p-3">NGÀY TẠO</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-prayers">
+                <!-- Prayers dynamic -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 9. Tab: Thể loại văn khấn -->
+        <div id="sim-panel-prayercats" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-zinc-500 font-bold">Danh sách danh mục văn khấn phong thủy</span>
+            <button onclick="addSimPrayerCat()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              + Thêm danh mục
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sim-grid-prayercats">
+            <!-- Prayer categories cards dynamic -->
+          </div>
+        </div>
+
+        <!-- 10. Tab: Quản lý Gia phả -->
+        <div id="sim-panel-genealogies" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <input type="text" id="search-gen" oninput="filterGenealogies()" placeholder="Tìm họ, địa chỉ dòng họ..." class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-56 text-[11px]">
+            <span class="text-[10px] text-zinc-400 font-bold">Tổng số: 615 dòng họ đã số hóa</span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4" id="sim-grid-genealogies">
+            <!-- Genealogies grids dynamic -->
+          </div>
+        </div>
+
+        <!-- 11. Tab: Mẫu ảnh gia phả (Screenshot 11 Empty State simulation) -->
+        <div id="sim-panel-genealogytemplates" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+              <input type="text" placeholder="Gia tộc" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-48 text-[11px] disabled opacity-60" disabled>
+              <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none text-[11px]" disabled><option>Trạng thái</option></select>
+            </div>
+            <button onclick="addSimGenTemplate()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              Thêm mẫu
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">Mẫu gia phả</th>
+                  <th class="p-3">Style khung tên gia phả</th>
+                  <th class="p-3">Style khung ảnh cụ tổ</th>
+                  <th class="p-3">Style khung ảnh các thành viên</th>
+                  <th class="p-3">Trạng thái</th>
+                  <th class="p-3 text-center">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" class="p-0">
+                    <!-- Empty State Container -->
+                    <div class="p-16 flex flex-col items-center justify-center text-center space-y-4 min-h-[300px]">
+                      <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                        <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.008 1.24l.885 1.77a2.25 2.25 0 002.007 1.24h1.98a2.25 2.25 0 002.007-1.24l.885-1.77a2.25 2.25 0 012.007-1.24h3.86m-18 0h18M2.25 13.5l1.625-8.129A1.875 1.875 0 015.72 4h12.56a1.875 1.875 0 011.845 1.371l1.625 8.129"></path>
+                        </svg>
+                      </div>
+                      <div class="space-y-1">
+                        <strong class="text-slate-800 text-sm font-bold block">Không có dữ liệu nào!</strong>
+                        <p class="text-[11px] text-slate-400 max-w-xs leading-normal">Chưa có mẫu ảnh gia phả nào được tải lên cho cấu hình khung phả đồ.</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- Pagination footer matching Screenshot 11 -->
+            <div class="bg-slate-50 border-t border-slate-200 px-4 py-3 flex items-center justify-between text-slate-500 font-medium">
+              <div>Hiển thị 0 trên tổng 0</div>
+              <div class="flex items-center gap-2">
+                <select class="bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none" disabled><option>10</option></select>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2.5 py-1 bg-black text-white font-bold rounded text-[10px]">1</span>
+                  <span class="text-slate-400">of 0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12. Tab: Thư viện Icons (Screenshot 12 simulation) -->
+        <div id="sim-panel-icons" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+              <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none text-[11px]"><option>Hoạt động</option><option>Khóa</option></select>
+              <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none text-[11px]"><option>Giảm dần</option><option>Tăng dần</option></select>
+            </div>
+            <button onclick="addSimIcon()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              Thêm Icon
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">Icon</th>
+                  <th class="p-3">Từ Khóa</th>
+                  <th class="p-3">Loại</th>
+                  <th class="p-3">Trạng Thái</th>
+                  <th class="p-3">Thời hạn</th>
+                  <th class="p-3">Ngày tạo</th>
+                  <th class="p-3 text-center">Hành Động</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-icons">
+                <!-- Icons rows dynamic -->
+              </tbody>
+            </table>
+            <!-- Pagination footer matching Screenshot 12 -->
+            <div class="bg-slate-50 border-t border-slate-200 px-4 py-3 flex items-center justify-between text-slate-500 font-medium">
+              <div id="sim-icons-count-label">Hiển thị 1 - 11 trên tổng 11</div>
+              <div class="flex items-center gap-2">
+                <select class="bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none"><option>20</option><option>50</option></select>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2.5 py-1 bg-black text-white font-bold rounded text-[10px]">1</span>
+                  <span class="text-slate-400">of 1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13. Tab: Từ khóa hệ thống (Screenshot 13 simulation) -->
+        <div id="sim-panel-keywords" class="hidden space-y-4">
+          <!-- Inner sub-tabs switcher -->
+          <div class="flex border-b border-slate-200 gap-4 mb-2">
+            <button onclick="switchKeywordSubTab('banned')" id="btn-kw-banned" class="pb-2 text-xs font-bold text-blue-600 border-b-2 border-blue-600">
+              Từ khóa cấm
+            </button>
+            <button onclick="switchKeywordSubTab('search')" id="btn-kw-search" class="pb-2 text-xs font-semibold text-slate-500 hover:text-slate-800">
+              Từ khóa tìm kiếm
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+              <input type="text" id="sim-search-kw-word" oninput="filterKeywords()" placeholder="Từ" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-36 text-[11px]">
+              <input type="text" id="sim-search-kw-key" oninput="filterKeywords()" placeholder="key" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none w-48 text-[11px] font-mono">
+            </div>
+            <button onclick="addSimKeyword()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-md shadow-blue-500/10 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+              Thêm từ khóa
+            </button>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+            <table class="w-full text-left border-collapse text-[11px] text-[#475569]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <th class="p-3 pl-4">TỪ</th>
+                  <th class="p-3">TỪ KHÓA</th>
+                  <th class="p-3 text-center">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="sim-table-body-keywords">
+                <!-- Keywords dynamic -->
+              </tbody>
+            </table>
+            <!-- Pagination footer matching Screenshot 13 -->
+            <div class="bg-slate-50 border-t border-slate-200 px-4 py-3 flex items-center justify-between text-slate-500 font-medium">
+              <div id="sim-kw-count-label">Hiển thị 1 - 20 trên tổng 152</div>
+              <div class="flex items-center gap-2">
+                <select class="bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none"><option>20</option><option>50</option></select>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2.5 py-1 bg-black text-white font-bold rounded text-[10px]">1</span>
+                  <span class="text-slate-400">of 8</span>
+                  <button class="px-1.5 py-1 border border-slate-200 bg-white rounded text-slate-400 hover:text-slate-700 ml-1">&gt;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14. Tab: Bản đồ gió Windy (Screenshot 14 simulation) -->
+        <div id="sim-panel-windmap" class="hidden space-y-4">
+          <!-- Map simulation screen container -->
+          <div class="w-full h-[450px] bg-[#0f1d36] rounded-3xl relative overflow-hidden shadow-inner border border-slate-800">
+            <!-- Background wind gradient vectors & labels -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none">
+              <!-- Grid lines -->
+              <line x1="0" y1="100" x2="1000" y2="100" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="0" y1="200" x2="1000" y2="200" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="0" y1="300" x2="1000" y2="300" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="0" y1="400" x2="1000" y2="400" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              
+              <line x1="200" y1="0" x2="200" y2="500" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="400" y1="0" x2="400" y2="500" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              <line x1="600" y1="0" x2="600" y2="500" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+              
+              <!-- Custom Landmass shapes (Vietnam South, Cambodia Coast) in translucent overlay -->
+              <path d="M 150 50 Q 200 120 280 160 T 360 210 T 420 280 T 480 320 T 560 380 T 640 420" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="60" stroke-linecap="round"/>
+              <path d="M 520 120 C 580 180 620 220 640 280 C 660 340 650 380 580 430 C 520 470 480 480 440 490" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="90" stroke-linecap="round"/>
+
+              <!-- Simulated wind flow vectors (drawn via animated SVG lines) -->
+              <path class="wind-line" d="M -50 80 Q 200 120 500 90 T 1000 110" fill="none" stroke-width="1.5" />
+              <path class="wind-line" d="M -50 180 Q 300 240 600 160 T 1100 220" fill="none" stroke-width="1.5" />
+              <path class="wind-line" d="M -50 280 Q 250 240 550 320 T 1050 270" fill="none" stroke-width="1.5" />
+              <path class="wind-line" d="M -50 380 Q 350 420 650 380 T 1150 410" fill="none" stroke-width="1.5" />
+            </svg>
+
+            <!-- Temperature map background details -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-[#0b132b]/80 via-[#1c2541]/40 to-[#3a506b]/10 pointer-events-none"></div>
+            
+            <!-- City Labels mapping the screenshot -->
+            <div class="absolute top-[80px] left-[150px] text-[9px] font-bold text-slate-400">Kampong Chhnang 31°</div>
+            <div class="absolute top-[60px] left-[320px] text-[9px] font-bold text-slate-400">Stung Treng 32°</div>
+            <div class="absolute top-[120px] left-[300px] text-[9px] font-bold text-slate-400">Kratie 30°</div>
+            <div class="absolute top-[180px] left-[350px] text-[9px] font-bold text-slate-400">Sen Monorom 29°</div>
+            <div class="absolute top-[140px] left-[180px] text-[9px] font-bold text-slate-400">Kampong Cham 31°</div>
+            <div class="absolute top-[190px] left-[130px] text-[9px] font-bold text-slate-400">Phnôm Pênh 30°</div>
+            <div class="absolute top-[240px] left-[190px] text-[9px] font-bold text-slate-400">Svay Rieng 30°</div>
+            <div class="absolute top-[110px] left-[550px] text-[9px] font-bold text-emerald-400/90">Gia Nghĩa 30°</div>
+            <div class="absolute top-[150px] left-[610px] text-[9px] font-bold text-emerald-400/90">Đà Lạt 23°</div>
+            <div class="absolute top-[200px] left-[680px] text-[9px] font-bold text-blue-400">Phan Thiết 31°</div>
+            
+            <!-- Southern Vietnam Specific Labels -->
+            <div class="absolute top-[130px] left-[450px] text-[9px] font-bold text-[#f59e0b]/90">Tây Ninh 31°</div>
+            <div class="absolute top-[175px] left-[460px] text-[9px] font-bold text-[#f59e0b]/90">Bến Cát 32°</div>
+            <div class="absolute top-[210px] left-[480px] text-[9px] font-bold text-[#f59e0b]/90">Biên Hòa 32°</div>
+            <div class="absolute top-[250px] left-[485px] text-[9px] font-bold text-[#f59e0b]/90">TP.HCM 31°</div>
+            <div class="absolute top-[280px] left-[530px] text-[9px] font-bold text-teal-400">Vũng Tàu 29°</div>
+            
+            <div class="absolute top-[285px] left-[415px] text-[9px] font-bold text-slate-300">Mỹ Tho 30°</div>
+            <div class="absolute top-[305px] left-[445px] text-[9px] font-bold text-slate-300">Bến Tre 30°</div>
+            <div class="absolute top-[345px] left-[455px] text-[9px] font-bold text-slate-300">Trà Vinh 30°</div>
+            <div class="absolute top-[375px] left-[420px] text-[9px] font-bold text-slate-300">Sóc Trăng 30°</div>
+            <div class="absolute top-[350px] left-[350px] text-[9px] font-bold text-slate-300">Cần Thơ 30°</div>
+            <div class="absolute top-[300px] left-[340px] text-[9px] font-bold text-slate-300">Cao Lãnh 31°</div>
+            <div class="absolute top-[315px] left-[295px] text-[9px] font-bold text-slate-300">Long Xuyên 31°</div>
+            <div class="absolute top-[360px] left-[260px] text-[9px] font-bold text-slate-300">Rạch Giá 31°</div>
+            <div class="absolute top-[430px] left-[270px] text-[9px] font-bold text-teal-400">Cà Mau 27°</div>
+            <div class="absolute top-[460px] left-[420px] text-[9px] font-bold text-teal-400">Côn Đảo 28°</div>
+
+            <!-- Passive Wind Direction Indicators (flowing arrows on map) -->
+            <div class="absolute top-[160px] left-[220px] text-slate-500/50 text-[10px] transform rotate-[135deg]">➔</div>
+            <div class="absolute top-[260px] left-[280px] text-slate-500/50 text-[10px] transform rotate-[110deg]">➔</div>
+            <div class="absolute top-[320px] left-[580px] text-slate-500/50 text-[10px] transform rotate-[180deg]">➔</div>
+            <div class="absolute top-[400px] left-[330px] text-slate-500/50 text-[10px] transform rotate-[160deg]">➔</div>
+
+            <!-- Map pins & Active Tooltip (Dong Xoai coordinates) -->
+            <div id="windy-active-pin" class="absolute top-[135px] left-[515px] z-10 flex flex-col items-center">
+              <div class="w-3.5 h-3.5 bg-amber-500 rounded-full animate-ping absolute"></div>
+              <div onclick="openWindPinModal('Dong Xoai')" class="w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-white shadow cursor-pointer"></div>
+              
+              <!-- Floating Tooltip Box matching Screenshot 14 -->
+              <div id="wind-tooltip" class="bg-[#1e293b] border border-slate-700 text-white px-2 py-1 rounded shadow-lg mt-1 flex items-center gap-1.5 text-[9px] whitespace-nowrap">
+                <span class="font-bold font-mono" id="pin-speed-val">3 kt</span>
+                <!-- Wind direction indicator arrow (rotating based on direction) -->
+                <span id="pin-arrow-indicator" class="text-amber-400 inline-block font-bold transform transition-transform duration-300">▼</span>
+                <!-- Select arrow -->
+                <span onclick="openWindPinModal('Dong Xoai')" class="text-zinc-400 text-[8px] hover:text-white cursor-pointer select-none">▼</span>
+                <span class="text-zinc-500">|</span>
+                <!-- Close tooltip -->
+                <span onclick="closeWindPin()" class="text-zinc-400 hover:text-white cursor-pointer font-bold text-[8px]">✕</span>
+              </div>
+              <div class="mt-0.5 bg-black/75 text-white text-[8px] font-bold px-1 py-0.2 rounded shadow">
+                C.Đồng Xoài
+              </div>
+            </div>
+
+            <!-- Timeline Player Controls at bottom left -->
+            <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-700/80 px-3 py-2 rounded-xl flex items-center gap-3 backdrop-blur-sm shadow-xl pointer-events-auto">
+              <button onclick="toggleWindPlay()" id="btn-wind-play" class="w-6 h-6 rounded-lg bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white text-[10px] transition-all">
+                <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="space-y-0.5">
+                <span class="text-[8px] text-zinc-400 block uppercase font-bold tracking-wider">Thời gian</span>
+                <span class="text-[9px] font-bold text-white font-mono block" id="sim-wind-time-label">Thứ Năm 11 — 13:00</span>
+              </div>
+            </div>
+
+            <!-- Map zoom buttons and Export file top right inside map container -->
+            <div class="absolute top-4 right-4 flex flex-col items-end gap-2 pointer-events-auto">
+              <button onclick="exportWindData()" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded shadow-md text-[9px] transition-all">
+                Xuất file
+              </button>
+              <div class="flex flex-col gap-1">
+                <button onclick="showToast('Phóng to bản đồ')" class="w-7 h-7 bg-slate-900/90 hover:bg-slate-800 text-white font-extrabold rounded-lg flex items-center justify-center border border-slate-700 shadow">+</button>
+                <button onclick="showToast('Thu nhỏ bản đồ')" class="w-7 h-7 bg-slate-900/90 hover:bg-slate-800 text-white font-extrabold rounded-lg flex items-center justify-center border border-slate-700 shadow">-</button>
+              </div>
+            </div>
+
+            <!-- Signature at bottom right -->
+            <div class="absolute bottom-4 right-4 text-[8px] text-zinc-500/80 font-bold bg-slate-900/40 px-2 py-0.5 rounded">
+              Dự báo thời tiết vượt trội với windy.com
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STATUS TOAST FEEDBACK inside simulator -->
+      <div id="sim-toast" class="hidden mt-4 p-3 rounded-xl text-center text-xs font-bold transition-all duration-300"></div>
+    </div>
+  </div>
+
+  <!-- EDIT / ADD MODAL SIMULATOR -->
+  <div id="sim-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white w-[480px] rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs text-left">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h4 class="font-bold text-slate-800 text-sm" id="modal-title">Chỉnh sửa thông tin</h4>
+        <button onclick="closeSimModal()" class="text-slate-400 hover:text-slate-600 text-base font-bold">✕</button>
+      </div>
+      <div id="modal-body" class="space-y-3">
+        <!-- Dynamic form fields -->
+      </div>
+      <div class="flex justify-end gap-2 border-t border-slate-200 pt-3">
+        <button onclick="closeSimModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 font-bold">Hủy</button>
+        <button onclick="saveSimModal()" class="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT FOR TABS SWITCHING & SIMULATOR LOGIC -->
+  <script>
+    // Header doc tab switching logic
+    function toggleDocTab(tabName) {
+      const btnSpec = document.getElementById('btn-tab-spec');
+      const btnFlow = document.getElementById('btn-tab-flow');
+      const btnPreview = document.getElementById('btn-tab-preview');
+
+      const tabSpec = document.getElementById('doc-tab-spec');
+      const tabFlow = document.getElementById('doc-tab-flow');
+      const tabPreview = document.getElementById('doc-tab-preview');
+
+      const activeBtnClass = "px-5 py-2 rounded-lg text-xs font-bold transition-all bg-[#2563eb] text-white shadow-sm border border-[#2563eb]/10";
+      const inactiveBtnClass = "px-5 py-2 rounded-lg text-xs font-bold transition-all text-[#64748b] hover:text-[#0f172a]";
+
+      if (tabSpec) tabSpec.classList.add('hidden');
+      if (tabFlow) tabFlow.classList.add('hidden');
+      if (tabPreview) tabPreview.classList.add('hidden');
+
+      if (btnSpec) btnSpec.className = inactiveBtnClass;
+      if (btnFlow) btnFlow.className = inactiveBtnClass;
+      if (btnPreview) btnPreview.className = inactiveBtnClass;
+
+      if (tabName === 'spec') {
+        if (tabSpec) tabSpec.classList.remove('hidden');
+        if (btnSpec) btnSpec.className = activeBtnClass;
+        document.body.classList.remove('overflow-hidden', 'h-screen');
+      } else if (tabName === 'flow') {
+        if (tabFlow) tabFlow.classList.remove('hidden');
+        if (btnFlow) btnFlow.className = activeBtnClass;
+        document.body.classList.remove('overflow-hidden', 'h-screen');
+      } else if (tabName === 'preview') {
+        if (tabPreview) tabPreview.classList.remove('hidden');
+        if (btnPreview) btnPreview.className = activeBtnClass;
+        document.body.classList.add('overflow-hidden', 'h-screen');
+        refreshSimWorkspace();
+      }
+    }
+
+    // SIMULATOR STATE DATA
+    let currentUpgradeTab = 'features'; 
+
+    let specialFeatures = [
+      { id: '1', name: 'Đại Cát Đại Lợi Phong Thủy Bát Tự', key: 'fengshui-seasonal', duration: '30 ngày', status: 'Hoạt động', date: '11/06/2026' }
+    ];
+
+    let generalConfigs = [
+      { id: 'gen1', group: 'Finance', key: 'Cấu hình xu cho tính năng gửi thiệp', value: '50 xu', desc: 'Số xu khấu trừ khi gửi thiệp.' },
+      { id: 'gen2', group: 'Finance', key: 'Cấu hình xu mặc định khi đăng ký', value: '100 xu', desc: 'Xu tặng khi tạo tài khoản.' },
+      { id: 'gen3', group: 'Finance', key: 'Cấu hình phí cho gian hàng và đơn hàng', value: '10%', desc: 'Mức chiết khấu cho mỗi đơn hàng.' },
+      { id: 'gen4', group: 'Security', key: 'Thời gian OTP hết hạn', value: '120 giây', desc: 'Mã xác thực SMS OTP hết hạn.' },
+      { id: 'gen5', group: 'Security', key: 'Cấu hình link cho QR cũ', value: 'https://qr.xheroapp.com/old', desc: 'Link redirect cho mã QR đời cũ.' },
+      { id: 'gen6', group: 'AI & Chatbot', key: 'Cấu hình từ khóa cấm thầy Mạnh AI', value: 'phản động, cờ bạc, lừa đảo', desc: 'Từ khóa cấm Chatbot trả lời.' },
+      { id: 'gen7', group: 'UI/UX TextStyle', key: 'Cấu hình TextStyle Menu Home', value: 'Gold Accent', desc: 'Kiểu hiển thị font chữ ngoài Home.' },
+      { id: 'gen8', group: 'AppStore Review Mode', key: 'Cấu hình hiển thị dữ liệu khi đang duyệt AppStore', value: 'Bật', desc: 'Tự động ẩn tính năng nhạy cảm phong thủy trên iOS.' }
+    ];
+
+    let advancedFeatures = [
+      { id: 'adv1', name: 'Phong thủy quản trị', key: 'phong-thuy-quan-tri', accessType: 'restricted', expiryDate: '', status: 'Hoạt động', date: '18/07/2024 12:34' },
+      { id: 'adv2', name: 'Bản đồ gió', key: 'windy-map', accessType: 'temporary', expiryDate: '2026-08-15', status: 'Hoạt động', date: '18/07/2024 12:33' },
+      { id: 'adv3', name: 'Quản lý lưu trữ file', key: 'file-manager', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '17/09/2024 17:28' },
+      { id: 'adv4', name: 'Kỳ môn âm bàn', key: 'yin-qimen', accessType: 'restricted', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' },
+      { id: 'adv5', name: 'Quản lý tổ chức sự kiện', key: 'event-management', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' },
+      { id: 'adv6', name: 'Xhero Scan', key: 'xhero-scan', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' },
+      { id: 'adv7', name: 'Quay màn hình Xhero Scan', key: 'xscan-recording', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' },
+      { id: 'adv8', name: 'Xuất file DXF', key: 'xscan-export-dxf', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' },
+      { id: 'adv9', name: 'Xác định tâm phong thuỷ', key: 'xscan-center-detect', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' },
+      { id: 'adv10', name: 'Bản đồ đồng mức', key: 'contour-map', accessType: 'allowed', expiryDate: '', status: 'Hoạt động', date: '11/06/2026 13:48' }
+    ];
+
+    let appMenuItems = [
+      { id: 'item1', name: 'La Kinh_1', iconSvg: `<svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8"/></svg>` },
+      { id: 'item2', name: 'Xem Ngày_1', iconSvg: `<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>` },
+      { id: 'item3', name: 'Đào Tạo_2_browser', iconSvg: `<svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13"/></svg>` },
+      { id: 'item4', name: 'Web Đào Tạo_2', iconSvg: `<svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>` },
+      { id: 'item5', name: 'Lịch Vạn Niên_1', iconSvg: `<svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>` },
+      { id: 'item6', name: 'Chuyên gia_2', iconSvg: `<svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>` },
+      { id: 'item7', name: 'Kỳ Môn_2', iconSvg: `<svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v8a4 4 0 01-8 0V7a3 3 0 016 0v4"/></svg>` },
+      { id: 'item8', name: 'Gia Phả_1', iconSvg: `<svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>` },
+      { id: 'item9', name: 'Vật Phẩm_1', iconSvg: `<svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>` },
+      { id: 'item10', name: 'Tư vấn doanh nghiệp_2', iconSvg: `<svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>` },
+      { id: 'item11', name: 'Sự Kiện_1', iconSvg: `<svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>` },
+      { id: 'item12', name: 'Văn Khấn_1', iconSvg: `<svg class="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13"/></svg>` }
+    ];
+
+    let appResources = [
+      { id: 'res1', title: 'Hướng dẫn sử dụng tính năng Giới thiệu bạn bè trên app Xhero', type: 'ptdn', status: 'Hoạt động', creator: '84981754134', date: '11/06/2025' },
+      { id: 'res2', title: 'Hướng dẫn sử dụng tính năng X-Check trên app Xhero', type: 'ptdn', status: 'Hoạt động', creator: '84981754134', date: '11/06/2025' },
+      { id: 'res3', title: 'Hướng dẫn sử dụng tính năng Xem phong thủy trên app Xhero', type: 'ptdn', status: 'Hoạt động', creator: '84981754134', date: '11/06/2025' },
+      { id: 'res4', title: 'Hướng dẫn sử dụng tính năng Vật phẩm và đặt mua vật phẩm trên app Xhero', type: 'ptdn', status: 'Hoạt động', creator: '84981754134', date: '11/06/2025' }
+    ];
+
+    let laKinhInterpretations = [
+      { id: 'lk1', title: 'Nam cấp trung - Sự phát triển nhân sự', wind: 'Đông', status: 'Hoạt động', date: '11/06/2026', creator: '84395209816' },
+      { id: 'lk2', title: 'Sứ mệnh - Ban lãnh đạo', wind: 'Tây Bắc', status: 'Hoạt động', date: '11/06/2026', creator: '84395209816' },
+      { id: 'lk3', title: 'Dòng tiền', wind: 'Tây Nam', status: 'Hoạt động', date: '11/06/2026', creator: '84395209816' }
+    ];
+
+    let banners = [
+      { id: 'b1', title: 'Banner Bát Tự Đông Sắp', url: 'https://phongthuydainam.vn/vi/wo...', position: 'Màn hình chính', lang: 'Tiếng Việt', priority: 1, status: 'Hoạt động', duration: '25/05/2026 - 14/06/2026' },
+      { id: 'b2', title: 'Banner Down App', url: 'https://download.xheroapp.com/', position: 'Màn hình chính', lang: 'Tiếng Việt', priority: 2, status: 'Hoạt động', duration: '25/05/2026 - 31/05/2026' }
+    ];
+
+    let prayers = [
+      { id: 'p1', title: 'Văn khấn lễ tạ sau khi sửa chữa', cat: 'Nhà cửa', views: 7, isPopular: 'Không', status: 'Hoạt động', date: '23/05/2026' },
+      { id: 'p2', title: 'Văn khấn lễ khai táo', cat: 'Nhà cửa', views: 4, isPopular: 'Không', status: 'Hoạt động', date: '23/05/2026' }
+    ];
+
+    let prayerCategories = [
+      { id: 'pc1', title: 'Nghi lễ gia đình', desc: 'Cúng gia tiên * Cúng giỗ * Tết', priority: 1, status: 'Hoạt động', date: '06/04/2026' },
+      { id: 'pc2', title: 'Nhà cửa', desc: 'Nhập trạch * Động thổ * Sửa nhà', priority: 2, status: 'Hoạt động', date: '06/04/2026' }
+    ];
+
+    let genealogies = [
+      { id: 'g1', name: 'HỌ NGUYỄN', representative: 'Nguyễn Văn Quyến', address: 'Xã Quý Nhất, Tỉnh Ninh Bình', count: 420 },
+      { id: 'g2', name: 'Cao Tổ Đặng Hưng Điển', representative: 'Văn Luân', address: 'Xã Thọ Phong, Tỉnh Quảng Xương, Thanh Hóa', count: 185 }
+    ];
+
+    let appIcons = [
+      { id: 'ic1', title: 'Thông báo ERP', keyword: 'erp', type: 'Thông báo', status: 'Hoạt động', duration: 'Thời hạn', date: '10/12/2025 14:54' },
+      { id: 'ic2', title: 'Ảnh form cung cấp thông tin', keyword: 'info-form', type: 'zalo', status: 'Hoạt động', duration: 'Thời hạn', date: '27/10/2025 16:58' },
+      { id: 'ic3', title: 'Bottom Nav Bar', keyword: 'navigation', type: 'navigation', status: 'Hoạt động', duration: 'Vĩnh viễn', date: '28/04/2025 22:31' },
+      { id: 'ic4', title: 'Background', keyword: 'background', type: 'background', status: 'Hoạt động', duration: 'Vĩnh viễn', date: '28/04/2025 18:41' },
+      { id: 'ic5', title: 'Email quên mật khẩu', keyword: 'request-otp-template', type: 'email', status: 'Hoạt động', duration: 'Thời hạn', date: '30/08/2024 13:33' },
+      { id: 'ic6', title: 'Email đăng ký', keyword: 'register-template', type: 'email', status: 'Hoạt động', duration: 'Thời hạn', date: '30/08/2024 13:32' },
+      { id: 'ic7', title: 'Sự kiện', keyword: 'event', type: 'Thông báo', status: 'Hoạt động', duration: 'Thời hạn', date: '15/07/2024 12:09' },
+      { id: 'ic8', title: 'Ngày tốt xấu', keyword: 'perfect-day', type: 'Thông báo', status: 'Hoạt động', duration: 'Thời hạn', date: '15/07/2024 12:08' },
+      { id: 'ic9', title: 'Đặt lịch chuyên gia', keyword: 'expert-order', type: 'Thông báo', status: 'Hoạt động', duration: 'Thời hạn', date: '15/07/2024 12:06' },
+      { id: 'ic10', title: 'Cập nhật', keyword: 'update', type: 'Thông báo', status: 'Hoạt động', duration: 'Thời hạn', date: '15/07/2024 12:04' },
+      { id: 'ic11', title: 'Hệ thống', keyword: 'system', type: 'Thông báo', status: 'Hoạt động', duration: 'Thời hạn', date: '15/07/2024 10:24' }
+    ];
+
+    let keywordsList = [
+      { id: 'k1', word: 'văn khấn', key: 'van-khan', category: 'banned' },
+      { id: 'k2', word: 'Văn khấn Thanh Minh tại bàn thờ gia tiên', key: 'van-khan-thanh-minh-tai-ban-tho-gia-tien', category: 'banned' },
+      { id: 'k3', word: 'Văn khấn Tết Hàn Thực', key: 'van-khan-tet-han-thuc', category: 'banned' },
+      { id: 'k4', word: 'Văn khấn Tết Đoan Ngọ', key: 'van-khan-tet-doan-ngo', category: 'banned' },
+      { id: 'k5', word: 'Văn khấn Thần Linh Gia Tiên Rằm tháng 7', key: 'van-khan-than-linh-gia-tien-ram-thang-7', category: 'banned' },
+      { id: 'k6', word: 'VĂN KHẤN TẾT THƯỢNG NGUYÊN (TRUNG THU)', key: 'van-khan-tet-thuong-nguyen-(trung-thu)', category: 'banned' },
+      { id: 'k7', word: 'VĂN KHẤN TẾT HẠ NGUYÊN RẰM THÁNG 10', key: 'van-khan-tet-ha-nguyen-ram-thang-10', category: 'banned' },
+      { id: 'k8', word: 'VĂN KHẤN THANH MINH TẠI PHẦN MỘ GIA TIÊN', key: 'van-khan-thanh-minh-tai-phan-mo-gia-tien', category: 'banned' },
+      { id: 'k9', word: 'VĂN KHẤN RẰM, MÙNG MỘT HẰNG THÁNG', key: 'van-khan-ram-mung-mot-hang-thang', category: 'banned' },
+      { id: 'k10', word: 'VĂN KHẤN TẾT NGUYÊN TIÊU, RẰM THÁNG GIÊNG', key: 'van-khan-tet-nguyen-tieu-ram-thang-gieng', category: 'banned' },
+      { id: 'k11', word: 'VĂN KHẤN CẦU AN (BAN THỜ PHẬT)', key: 'van-khan-cau-an-(ban-tho-phat)', category: 'banned' },
+      { id: 'k12', word: 'VĂN KHẤN LỄ ĐỀN NHÂN DỊP ĐẦU NĂM', key: 'van-khan-le-den-nhan-dip-dau-nam', category: 'banned' },
+      { id: 'k13', word: 'VĂN KHẤN BỒ TÁT QUÁN THẾ ÂM', key: 'van-khan-bo-tat-quan-the-am', category: 'banned' },
+      { id: 'k14', word: 'VĂN KHẤN ĐỨC THÁNH HIỀN', key: 'van-khan-duc-thanh-hien', category: 'banned' },
+      { id: 'k15', word: 'VĂN KHẤN ĐỨC ÔNG - ĐỨC CHÚA ÔNG', key: 'van-khan-duc-ong-duc-chua-ong', category: 'banned' },
+      { id: 'k16', word: 'VĂN KHẤN CẦU BÌNH AN Ở BAN TAM BẢO', key: 'van-khan-cau-binh-an-o-ban-tam-bao', category: 'banned' },
+      { id: 'k17', word: 'VĂN KHẤN HÓA KIM NGÂN, VÀNG TIỀN', key: 'van-khan-hoa-kim-ngan-vang-tien', category: 'banned' },
+      { id: 'k18', word: 'VĂN KHẤN GIA TIÊN MÙNG 1, MÙNG 2', key: 'van-khan-gia-tien-mung-1-mung-2', category: 'banned' },
+      { id: 'k19', word: 'lịch vạn niên', key: 'lich-van-nien', category: 'search' },
+      { id: 'k20', word: 'xem hướng nhà', key: 'xem-huong-nha', category: 'search' }
+    ];
+
+    let currentKwCategory = 'banned'; 
+
+    let windyPin = {
+      name: 'Đồng Xoài',
+      speed: 3,
+      direction: 'Nam'
+    };
+
+    let currentEditItem = null;
+
+    let vipAccounts = [
+      { id: 'vip1', name: 'Nguyễn Văn A', phone: '84912345678', isVip: true, customPermissions: ['ALL'], status: 'Hoạt động' },
+      { id: 'vip2', name: 'Trần Thị B', phone: '84987654321', isVip: true, customPermissions: ['windy-map', 'xhero-scan'], status: 'Hoạt động' },
+      { id: 'vip3', name: 'Lê Văn C', phone: '84933334444', isVip: true, customPermissions: ['yin-qimen'], status: 'Hoạt động' },
+      { id: 'vip4', name: 'Phạm Văn D', phone: '84944445555', isVip: false, customPermissions: [], status: 'Tạm khóa' }
+    ];
+
+    // Default permissions are now managed dynamically via advancedFeatures accessType configurations
+
+    // Switch dynamic sub-tab inside upgraded simulator
+    function setUpgradeTab(tab) {
+      currentUpgradeTab = tab;
+      const tabs = ['features', 'general', 'advanced', 'vipaccounts', 'items', 'resources', 'lakinh', 'banners', 'prayers', 'prayercats', 'genealogies', 'genealogytemplates', 'icons', 'keywords', 'windmap'];
+      
+      tabs.forEach(t => {
+        const btn = document.getElementById(`btn-up-tab-${t}`);
+        const panel = document.getElementById(`sim-panel-${t}`);
+
+        if (t === tab) {
+          btn.className = "w-full text-left px-3 py-2.5 rounded-xl border border-blue-500 bg-blue-50 text-blue-600 font-bold flex items-center gap-2.5 transition-all";
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = "w-full text-left px-3 py-2.5 rounded-xl border border-transparent text-[#475569] font-semibold flex items-center gap-2.5 transition-all hover:bg-slate-50";
+          panel.classList.add('hidden');
+        }
+      });
+
+      // Update Header Breadcrumb Title
+      const titleMap = {
+        'features': 'Tổng quan / Cấu hình - Tính năng đặc biệt',
+        'general': 'Tổng quan / Cấu hình - Chung',
+        'advanced': 'Tổng quan / Cấu hình - Tính năng nâng cao',
+        'vipaccounts': 'Tổng quan / Cấu hình - Tài khoản VIP & Phân quyền',
+        'items': 'Tổng quan / Cấu hình - Danh mục Item app',
+        'resources': 'Tổng quan / Tài nguyên - Bộ dữ liệu AI',
+        'lakinh': 'Tổng quan / Tài nguyên - Luận giải La kinh',
+        'banners': 'Tổng quan / Tài nguyên - Quản lý Banners',
+        'prayers': 'Tổng quan / Tài nguyên - Bài viết Văn khấn',
+        'prayercats': 'Tổng quan / Tài nguyên - Thể loại Văn khấn',
+        'genealogies': 'Tổng quan / Tài nguyên - Quản lý Gia phả',
+        'genealogytemplates': 'Tổng quan / Tài nguyên - Mẫu ảnh Gia phả',
+        'icons': 'Tổng quan / Tài nguyên - Thư viện Icons',
+        'keywords': 'Tổng quan / Tài nguyên - Phím tắt Từ khóa',
+        'windmap': 'Tổng quan / Tài nguyên - Bản đồ gió Windy'
+      };
+      document.getElementById('sim-current-view-title').innerText = titleMap[tab];
+      refreshSimWorkspace();
+    }
+
+    function refreshSimWorkspace() {
+      if (currentUpgradeTab === 'features') renderFeaturesTable();
+      if (currentUpgradeTab === 'general') renderGeneralGrid();
+      if (currentUpgradeTab === 'advanced') renderAdvancedTable();
+      if (currentUpgradeTab === 'vipaccounts') {
+        renderVipAccountsTable();
+        renderDefaultPermissions();
+      }
+      if (currentUpgradeTab === 'items') {
+        renderItemsList();
+        renderMobileGridPreview();
+      }
+      if (currentUpgradeTab === 'resources') renderResourcesTable();
+      if (currentUpgradeTab === 'lakinh') renderLaKinhTable();
+      if (currentUpgradeTab === 'banners') renderBannersTable();
+      if (currentUpgradeTab === 'prayers') renderPrayersTable();
+      if (currentUpgradeTab === 'prayercats') renderPrayerCatsGrid();
+      if (currentUpgradeTab === 'genealogies') renderGenealogiesGrid();
+      if (currentUpgradeTab === 'icons') renderIconsTable();
+      if (currentUpgradeTab === 'keywords') renderKeywordsTable();
+      if (currentUpgradeTab === 'windmap') renderWindyMapSim();
+    }
+
+    // 15. VIP ACCOUNTS & PERMISSIONS RENDER
+    function renderVipAccountsTable(filteredData = vipAccounts) {
+      const tbody = document.getElementById('sim-table-body-vipaccounts');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => {
+        const permBadges = item.customPermissions.map(p => {
+          let name = p;
+          if (p === 'ALL') name = 'Full Quyền';
+          else {
+            const found = advancedFeatures.find(d => d.key === p);
+            if (found) name = found.name;
+          }
+          return `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700 mr-1">${name}</span>`;
+        }).join('');
+
+        return `
+          <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+            <td class="p-3 pl-4 font-semibold text-slate-800">${item.name}</td>
+            <td class="p-3 font-mono">${item.phone}</td>
+            <td class="p-3">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" ${item.isVip ? 'checked' : ''} onchange="toggleVipStatus('${item.id}')" class="sr-only peer">
+                <div class="w-7 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-green-600"></div>
+                <span class="ml-1.5 text-[9px] font-bold text-slate-500">${item.isVip ? 'isVIP' : 'Thường'}</span>
+              </label>
+            </td>
+            <td class="p-3">${permBadges || '<span class="text-slate-400">Không có</span>'}</td>
+            <td class="p-3 text-center flex items-center justify-center gap-1.5">
+              <button onclick="editSimVipAccount('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              </button>
+              <button onclick="deleteSimVipAccount('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-red-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterVipAccounts() {
+      const q = document.getElementById('search-vip').value.toLowerCase();
+      const filtered = vipAccounts.filter(x => x.name.toLowerCase().includes(q) || x.phone.includes(q));
+      renderVipAccountsTable(filtered);
+    }
+
+    // Toggle VIP isVIP status check flag
+    function toggleVipStatus(id) {
+      const item = vipAccounts.find(x => x.id === id);
+      if (item) {
+        item.isVip = !item.isVip;
+        showToast(`Đã ${item.isVip ? 'bật' : 'tắt'} cờ VIP cho tài khoản ${item.name}.`);
+        refreshSimWorkspace();
+      }
+    }
+
+    function addSimVipAccount() {
+      openSimModal('add-vip', 'Thêm tài khoản Wishlist (VIP) mới');
+    }
+
+    function editSimVipAccount(id) {
+      const item = vipAccounts.find(x => x.id === id);
+      if (item) {
+        openSimModal('edit-vip', 'Sửa tài khoản VIP & Phân quyền', item);
+      }
+    }
+
+    function deleteSimVipAccount(id) {
+      if (confirm('Bạn có chắc muốn xóa tài khoản này khỏi danh sách VIP?')) {
+        vipAccounts = vipAccounts.filter(x => x.id !== id);
+        showToast('Đã xóa tài khoản khỏi danh sách VIP.');
+        refreshSimWorkspace();
+      }
+    }
+
+    // Render default permissions for general users
+    function renderDefaultPermissions() {
+      const container = document.getElementById('sim-default-users-permissions');
+      if (!container) return;
+
+      container.innerHTML = advancedFeatures.map(item => {
+        const isTemp = item.accessType === 'temporary';
+        return `
+          <div class="bg-slate-50 border border-slate-200/60 p-2.5 rounded-xl text-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-800">${item.name}</span>
+              <select id="default-access-${item.id}" onchange="changeDefaultPermAccess('${item.id}', this.value)" class="bg-white border border-slate-200 rounded p-1.5 focus:outline-none text-[10px] font-bold text-slate-600">
+                <option value="restricted" ${item.accessType === 'restricted' ? 'selected' : ''}>Không cho phép</option>
+                <option value="allowed" ${item.accessType === 'allowed' ? 'selected' : ''}>Cho phép (Vĩnh viễn)</option>
+                <option value="temporary" ${item.accessType === 'temporary' ? 'selected' : ''}>Cho phép (Thời hạn)</option>
+              </select>
+            </div>
+            <div id="default-date-container-${item.id}" class="${isTemp ? '' : 'hidden'} flex items-center justify-between gap-2">
+              <span class="text-[10px] text-slate-500 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Hạn tạm thời:
+              </span>
+              <input type="date" id="default-date-${item.id}" value="${item.expiryDate || ''}" class="bg-white border border-slate-200 rounded px-2 py-1 text-[10px] focus:outline-none font-mono text-slate-700">
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function changeDefaultPermAccess(id, val) {
+      const dateContainer = document.getElementById(`default-date-container-${id}`);
+      if (val === 'temporary') {
+        dateContainer.classList.remove('hidden');
+        const dateInput = document.getElementById(`default-date-${id}`);
+        if (!dateInput.value) {
+          const d = new Date();
+          d.setMonth(d.getMonth() + 3);
+          dateInput.value = d.toISOString().split('T')[0];
+        }
+      } else {
+        dateContainer.classList.add('hidden');
+      }
+    }
+
+    function saveDefaultPermissions() {
+      advancedFeatures.forEach(item => {
+        const accessSel = document.getElementById(`default-access-${item.id}`);
+        if (accessSel) {
+          item.accessType = accessSel.value;
+          if (item.accessType === 'temporary') {
+            item.expiryDate = document.getElementById(`default-date-${item.id}`).value;
+          } else {
+            item.expiryDate = '';
+          }
+        }
+      });
+      showToast('Đã lưu cấu hình quyền mặc định cho toàn bộ học viên.');
+      refreshSimWorkspace();
+    }
+
+    function toggleVipPermissionsModal(chk) {
+      const subs = document.querySelectorAll('.m-vip-p-sub');
+      subs.forEach(s => {
+        s.disabled = chk.checked;
+        if (chk.checked) s.checked = false;
+      });
+    }
+
+    function changeModalAdvancedAccess(val) {
+      const dateContainer = document.getElementById('m-adv-date-container');
+      if (val === 'temporary') {
+        dateContainer.classList.remove('hidden');
+        const dateInput = document.getElementById('m-adv-expirydate');
+        if (!dateInput.value) {
+          const d = new Date();
+          d.setMonth(d.getMonth() + 3);
+          dateInput.value = d.toISOString().split('T')[0];
+        }
+      } else {
+        dateContainer.classList.add('hidden');
+      }
+    }
+
+    // 1. SPECIAL FEATURES RENDER
+    function renderFeaturesTable(filteredData = specialFeatures) {
+      const tbody = document.getElementById('sim-table-body-features');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+          <td class="p-3 pl-4 font-semibold text-slate-800">${item.name}</td>
+          <td class="p-3 font-mono">${item.key}</td>
+          <td class="p-3">${item.duration}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold ${item.status === 'Hoạt động' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${item.status}</span>
+          </td>
+          <td class="p-3">${item.date}</td>
+          <td class="p-3 text-center flex items-center justify-center gap-1.5">
+            <button onclick="editSimFeature('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterSpecialFeatures() {
+      const q = document.getElementById('search-feature').value.toLowerCase();
+      const filtered = specialFeatures.filter(x => x.name.toLowerCase().includes(q) || x.key.toLowerCase().includes(q));
+      renderFeaturesTable(filtered);
+    }
+
+    function addSimSpecialFeature() {
+      openSimModal('add-feature', 'Thêm Tính Năng Đặc Biệt Mới');
+    }
+
+    function editSimFeature(id) {
+      const item = specialFeatures.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-feature', 'Sửa Tính Năng Đặc Biệt', item);
+    }
+
+
+    // 2. GENERAL CONFIGS RENDER
+    function renderGeneralGrid(filterQuery = '') {
+      const container = document.getElementById('sim-container-general');
+      if (!container) return;
+
+      const filtered = generalConfigs.filter(item => {
+        if (!filterQuery) return true;
+        return item.key.toLowerCase().includes(filterQuery.toLowerCase()) || item.group.toLowerCase().includes(filterQuery.toLowerCase());
+      });
+
+      const groups = {};
+      filtered.forEach(item => {
+        if (!groups[item.group]) groups[item.group] = [];
+        groups[item.group].push(item);
+      });
+
+      container.innerHTML = Object.keys(groups).map(gName => `
+        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3 shadow-sm text-left">
+          <span class="text-[10px] font-extrabold text-[#2563eb] uppercase tracking-wider block border-b border-slate-200 pb-1.5">${gName} Group</span>
+          <div class="space-y-2">
+            ${groups[gName].map(item => `
+              <div class="flex items-start justify-between bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                <div class="space-y-1 pr-2">
+                  <span class="font-bold text-slate-800 block text-[11px]">${item.key}</span>
+                  <p class="text-[10px] text-slate-400 leading-tight">${item.desc}</p>
+                  <code class="text-[#2563eb] font-mono text-[10px] bg-slate-50 border border-slate-200/60 px-1.5 py-0.5 rounded block w-fit mt-1">Gán: ${item.value}</code>
+                </div>
+                <button onclick="editSimGeneral('${item.id}')" class="p-1 hover:bg-slate-50 border border-slate-100 rounded text-blue-600 shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterGeneralConfigs() {
+      const val = document.getElementById('sim-search-general').value;
+      renderGeneralGrid(val);
+    }
+
+    function editSimGeneral(id) {
+      const item = generalConfigs.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-general', 'Cập Nhật Tham Số Hệ Thống', item);
+    }
+
+
+    // 3. ADVANCED FEATURES RENDER
+    function renderAdvancedTable(filteredData = advancedFeatures) {
+      const tbody = document.getElementById('sim-table-body-advanced');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => {
+        let authBadge = '';
+        if (item.accessType === 'allowed') {
+          authBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">Cho phép vĩnh viễn</span>`;
+        } else if (item.accessType === 'restricted') {
+          authBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Không cho phép</span>`;
+        } else if (item.accessType === 'temporary') {
+          const todayStr = new Date().toISOString().split('T')[0];
+          const isAct = todayStr <= item.expiryDate;
+          if (isAct) {
+            authBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-700">Tạm thời (Đến ${item.expiryDate})</span>`;
+          } else {
+            authBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-100 text-slate-500">Tạm thời (Hết hạn ${item.expiryDate})</span>`;
+          }
+        }
+
+        return `
+          <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+            <td class="p-3 pl-4 font-semibold text-slate-800">${item.name}</td>
+            <td class="p-3 font-mono text-zinc-500">${item.key}</td>
+            <td class="p-3 font-semibold">${authBadge}</td>
+            <td class="p-3">
+              <label class="switch-toggle">
+                <input type="checkbox" ${item.status === 'Hoạt động' ? 'checked' : ''} onchange="toggleAdvStatus('${item.id}', this.checked)">
+                <span class="slider-toggle"></span>
+              </label>
+            </td>
+            <td class="p-3 text-zinc-400">${item.date}</td>
+            <td class="p-3 text-center flex justify-center gap-1.5">
+              <button onclick="editSimAdvanced('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+
+    function toggleAdvStatus(id, isChecked) {
+      const item = advancedFeatures.find(x => x.id === id);
+      if (item) {
+        item.status = isChecked ? 'Hoạt động' : 'Tạm khóa';
+        showToast(`Đã cập nhật trạng thái ${item.name} sang: ${item.status}`);
+      }
+    }
+
+    function filterAdvancedFeatures() {
+      const q = document.getElementById('search-adv').value.toLowerCase();
+      const filtered = advancedFeatures.filter(x => x.name.toLowerCase().includes(q) || x.key.toLowerCase().includes(q));
+      renderAdvancedTable(filtered);
+    }
+
+    function addSimAdvancedFeature() {
+      openSimModal('add-advanced', 'Thêm Mới modul Nâng Cao');
+    }
+
+    function editSimAdvanced(id) {
+      const item = advancedFeatures.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-advanced', 'Sửa Thiết Lập Modul', item);
+    }
+
+
+    // 4. MENU ITEMS REORDERING
+    function renderItemsList() {
+      const container = document.getElementById('sim-list-app-items');
+      if (!container) return;
+
+      container.innerHTML = appMenuItems.map((item, idx) => `
+        <div class="p-2 grid grid-cols-12 items-center hover:bg-slate-50/60 transition-all">
+          <div class="col-span-1 font-bold text-slate-400 pl-1">${idx + 1}</div>
+          <div class="col-span-5 font-bold text-slate-800 text-[11px]">${item.name}</div>
+          <div class="col-span-2 text-center flex justify-center">${item.iconSvg}</div>
+          <div class="col-span-4 flex justify-center gap-1.5">
+            <button onclick="swapSimItem(${idx}, ${idx - 1})" ${idx === 0 ? 'disabled class="p-1 text-slate-300 cursor-not-allowed"' : 'class="p-1 text-blue-600 hover:bg-slate-100 rounded"'} title="Di chuyển lên">
+              ▲
+            </button>
+            <button onclick="swapSimItem(${idx}, ${idx + 1})" ${idx === appMenuItems.length - 1 ? 'disabled class="p-1 text-slate-300 cursor-not-allowed"' : 'class="p-1 text-blue-600 hover:bg-slate-100 rounded"'} title="Di chuyển xuống">
+              ▼
+            </button>
+            <button onclick="editSimItem('${item.id}')" class="p-1 text-blue-600 hover:bg-slate-100 rounded ml-1" title="Sửa">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMobileGridPreview() {
+      const container = document.getElementById('sim-mobile-grid-container');
+      if (!container) return;
+
+      container.innerHTML = appMenuItems.map(item => `
+        <div class="bg-white border border-slate-200 p-2 rounded-xl shadow-sm flex flex-col items-center justify-center text-center space-y-1">
+          <div class="p-1 rounded bg-blue-50/80 shrink-0">
+            ${item.iconSvg}
+          </div>
+          <span class="text-[7px] font-bold text-slate-700 truncate w-full">${item.name}</span>
+        </div>
+      `).join('');
+    }
+
+    function swapSimItem(fromIdx, toIdx) {
+      if (toIdx < 0 || toIdx >= appMenuItems.length) return;
+      const temp = appMenuItems[fromIdx];
+      appMenuItems[fromIdx] = appMenuItems[toIdx];
+      appMenuItems[toIdx] = temp;
+      renderItemsList();
+      renderMobileGridPreview();
+      showToast('Đã sắp xếp phím tắt trên App di động và tự động cập nhật sortOrder!');
+    }
+
+    function addSimMenuItem() {
+      openSimModal('add-item', 'Thêm Phím Tắt Menu');
+    }
+
+    function editSimItem(id) {
+      const item = appMenuItems.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-item', 'Sửa Tiện Ích Menu', item);
+    }
+
+    function deleteSimItem(idx) {
+      appMenuItems.splice(idx, 1);
+      renderItemsList();
+      renderMobileGridPreview();
+    }
+
+
+    // 5. RESOURCES (AI DATASETS)
+    function renderResourcesTable(filteredData = appResources) {
+      const tbody = document.getElementById('sim-table-body-resources');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+          <td class="p-3 pl-4 font-semibold text-slate-800 max-w-sm truncate">${item.title}</td>
+          <td class="p-3 font-mono">${item.type}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">${item.status}</span>
+          </td>
+          <td class="p-3 font-mono text-zinc-500">${item.creator}</td>
+          <td class="p-3 text-zinc-400">${item.date}</td>
+          <td class="p-3 text-center flex justify-center gap-1">
+            <button onclick="editSimResource('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterResources() {
+      const val = document.getElementById('sim-search-resource').value.toLowerCase();
+      const filtered = appResources.filter(x => x.title.toLowerCase().includes(val));
+      renderResourcesTable(filtered);
+    }
+
+    function addSimResource() {
+      openSimModal('add-resource', 'Tạo Hướng Dẫn AI Mới');
+    }
+
+    function editSimResource(id) {
+      const item = appResources.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-resource', 'Sửa Hướng Dẫn AI', item);
+    }
+
+
+    // 6. COMPASS LA KINH INTERPRETATIONS RENDER
+    function renderLaKinhTable(filteredData = laKinhInterpretations) {
+      const tbody = document.getElementById('sim-table-body-lakinh');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+          <td class="p-3 pl-4 font-semibold text-slate-800">${item.title}</td>
+          <td class="p-3 font-semibold text-[#2563eb]">${item.wind}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">${item.status}</span>
+          </td>
+          <td class="p-3 text-zinc-400">${item.date}</td>
+          <td class="p-3 font-mono text-zinc-500">${item.creator}</td>
+          <td class="p-3 text-center flex justify-center gap-1.5">
+            <button onclick="editSimLaKinh('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600" title="Sửa">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterLaKinh() {
+      const w = document.getElementById('filter-lakinh-wind').value;
+      const filtered = laKinhInterpretations.filter(x => !w || x.wind === w);
+      renderLaKinhTable(filtered);
+    }
+
+    function addSimLaKinh() {
+      openSimModal('add-lakinh', 'Thêm Luận Giải Hướng Gió');
+    }
+
+    function editSimLaKinh(id) {
+      const item = laKinhInterpretations.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-lakinh', 'Sửa Luận Giải Hướng Gió', item);
+    }
+
+
+    // 7. BANNERS RENDER
+    function renderBannersTable(filteredData = banners) {
+      const tbody = document.getElementById('sim-table-body-banners');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+          <td class="p-3 pl-4">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-7 rounded bg-red-600 shrink-0"></div>
+              <div class="space-y-0.5">
+                <span class="font-bold text-slate-800 block">${item.title}</span>
+                <span class="font-mono text-[9px] text-zinc-400 block max-w-xs truncate">${item.url}</span>
+              </div>
+            </div>
+          </td>
+          <td class="p-3 text-slate-600 font-semibold">${item.position}</td>
+          <td class="p-3 text-slate-500">${item.lang}</td>
+          <td class="p-3 text-center font-bold text-zinc-800">${item.priority}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold ${item.status === 'Hoạt động' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-400'}">${item.status}</span>
+          </td>
+          <td class="p-3 text-zinc-400 font-mono">${item.duration}</td>
+          <td class="p-3 text-center flex justify-center gap-1.5">
+            <button onclick="editSimBanner('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600" title="Sửa">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterBanners() {
+      const q = document.getElementById('search-banner').value.toLowerCase();
+      const filtered = banners.filter(x => x.title.toLowerCase().includes(q) || x.url.toLowerCase().includes(q));
+      renderBannersTable(filtered);
+    }
+
+    function addSimBanner() {
+      openSimModal('add-banner', 'Tạo Mới Banner');
+    }
+
+    function editSimBanner(id) {
+      const item = banners.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-banner', 'Sửa Banner', item);
+    }
+
+
+    // 8. PRAYERS RENDER
+    function renderPrayersTable(filteredData = prayers) {
+      const tbody = document.getElementById('sim-table-body-prayers');
+      if (!tbody) return;
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+          <td class="p-3 pl-4 font-semibold text-slate-800">${item.title}</td>
+          <td class="p-3 text-indigo-600 font-semibold">${item.cat}</td>
+          <td class="p-3 text-center font-bold text-slate-700">${item.views}</td>
+          <td class="p-3 text-slate-500">${item.isPopular}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">${item.status}</span>
+          </td>
+          <td class="p-3 text-zinc-400 font-mono">${item.date}</td>
+          <td class="p-3 text-center flex justify-center gap-1.5">
+            <button onclick="editSimPrayer('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600" title="Sửa">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterPrayers() {
+      const q = document.getElementById('search-prayer').value.toLowerCase();
+      const filtered = prayers.filter(x => !q || x.title.toLowerCase().includes(q));
+      renderPrayersTable(filtered);
+    }
+
+    function addSimPrayer() {
+      openSimModal('add-prayer', 'Thêm Bài Viết Văn Khấn');
+    }
+
+    function editSimPrayer(id) {
+      const item = prayers.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-prayer', 'Sửa Bài Văn Khấn', item);
+    }
+
+
+    // 9. PRAYER CATEGORIES RENDER
+    function renderPrayerCatsGrid() {
+      const grid = document.getElementById('sim-grid-prayercats');
+      if (!grid) return;
+
+      grid.innerHTML = prayerCategories.map(item => `
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex gap-4 items-center shadow-sm">
+          <div class="w-16 h-12 bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 rounded-lg flex items-center justify-center shrink-0 text-amber-700 font-bold font-mono">
+            Văn khấn
+          </div>
+          <div class="flex-1 space-y-1 text-left min-w-0">
+            <div class="flex items-center justify-between">
+              <strong class="font-bold text-slate-800 text-xs block truncate">${item.title}</strong>
+              <span class="text-[9px] bg-indigo-50 text-indigo-700 font-bold px-1.5 py-0.2 rounded">Ưu tiên ${item.priority}</span>
+            </div>
+            <p class="text-[10px] text-slate-400 truncate leading-tight">${item.desc}</p>
+            <div class="flex items-center justify-between pt-1">
+              <span class="px-2 py-0.2 text-[8px] rounded bg-green-50 text-green-700 font-bold">${item.status}</span>
+              <button onclick="editSimPrayerCat('${item.id}')" class="text-blue-600 hover:text-blue-700 font-bold text-[10px]">
+                Sửa
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addSimPrayerCat() {
+      openSimModal('add-prayercat', 'Tạo Mới Danh Mục');
+    }
+
+    function editSimPrayerCat(id) {
+      const item = prayerCategories.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-prayercat', 'Sửa Danh Mục', item);
+    }
+
+
+    // 10. GENEALOGIES RENDER (Grid Card)
+    function renderGenealogiesGrid(filteredData = genealogies) {
+      const grid = document.getElementById('sim-grid-genealogies');
+      if (!grid) return;
+
+      grid.innerHTML = filteredData.map(item => `
+        <div onclick="showGenealogyTree('${item.id}')" class="bg-white border border-slate-200 hover:border-blue-500 p-4 rounded-2xl shadow-sm text-left space-y-3 cursor-pointer transition-all">
+          <div class="flex items-center justify-between">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2a5 5 0 100 10 5 5 0 000-10zM12 12v6M8 18h8M8 18a2 2 0 11-4 0 2 2 0 014 0zm8 0a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+            </div>
+            <span class="text-[9px] font-bold text-zinc-400">${item.count} thành viên</span>
+          </div>
+          <div class="space-y-1">
+            <strong class="font-bold text-slate-800 text-xs block truncate">${item.name}</strong>
+            <div class="text-[10px] text-slate-500 leading-relaxed">
+              <span class="block truncate">Đại diện: <strong>${item.representative}</strong></span>
+              <span class="block truncate text-slate-400">Từ đường: ${item.address}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterGenealogies() {
+      const q = document.getElementById('search-gen').value.toLowerCase();
+      const filtered = genealogies.filter(x => x.name.toLowerCase().includes(q) || x.representative.toLowerCase().includes(q) || x.address.toLowerCase().includes(q));
+      renderGenealogiesGrid(filtered);
+    }
+
+    function showGenealogyTree(id) {
+      const item = genealogies.find(x => x.id === id);
+      if (!item) return;
+      
+      document.getElementById('modal-title').innerText = `Sơ đồ phả hệ: ${item.name}`;
+      document.getElementById('modal-body').innerHTML = `
+        <div class="space-y-4 text-center">
+          <div class="bg-blue-50/70 p-3 rounded-lg border border-blue-100 text-left">
+            <span class="font-bold text-blue-800 block text-[11px]">Thông tin dòng họ:</span>
+            <p class="text-[10px] text-slate-600 font-semibold mt-1">Đại diện: ${item.representative}</p>
+            <p class="text-[10px] text-slate-600">Từ đường: ${item.address}</p>
+          </div>
+          <div class="flex flex-col items-center gap-2 py-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div class="px-3 py-1.5 bg-blue-600 text-white rounded font-bold">${item.representative} (Cấp 1)</div>
+            <div class="w-0.5 h-5 bg-slate-300"></div>
+            <div class="flex gap-4">
+              <div class="px-2 py-1 bg-white border rounded font-bold text-slate-700">Nguyễn Anh (Cấp 2)</div>
+              <div class="px-2 py-1 bg-white border rounded font-bold text-slate-700">Nguyễn Tú (Cấp 2)</div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('sim-modal').classList.remove('hidden');
+    }
+
+
+    // 11. GENEALOGY TEMPLATES RENDER (Empty state trigger modal)
+    function addSimGenTemplate() {
+      openSimModal('add-template', 'Thêm Mới Mẫu Ảnh Gia Phả');
+    }
+
+
+    // 12. ICONS DIRECTORY RENDER (Screenshot 12)
+    function renderIconsTable() {
+      const tbody = document.getElementById('sim-table-body-icons');
+      if (!tbody) return;
+
+      tbody.innerHTML = appIcons.map(item => {
+        let iconHtml = '';
+        if (item.keyword === 'erp') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-[12px] shadow-sm">X</div>`;
+        } else if (item.keyword === 'info-form') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-orange-100 flex items-center justify-center text-orange-600 text-xs border border-orange-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>`;
+        } else if (item.keyword === 'navigation') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-[#1e293b] flex items-center justify-center text-white text-[8px] font-bold border border-slate-700">NAV</div>`;
+        } else if (item.keyword === 'background') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-gradient-to-br from-yellow-300 via-amber-400 to-orange-500 border border-amber-300 shadow-inner"></div>`;
+        } else if (item.keyword === 'request-otp-template' || item.keyword === 'register-template') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          </div>`;
+        } else if (item.keyword === 'event') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 relative">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>
+          </div>`;
+        } else if (item.keyword === 'perfect-day') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 font-extrabold text-[10px]">☯</div>`;
+        } else if (item.keyword === 'expert-order') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          </div>`;
+        } else if (item.keyword === 'update') {
+          iconHtml = `<div class="w-8 h-8 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.75 8.25H12v8"></path></svg>
+          </div>`;
+        } else {
+          iconHtml = `<div class="w-8 h-8 rounded bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+          </div>`;
+        }
+
+        return `
+          <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+            <td class="p-3 pl-4">
+              <div class="flex items-center gap-3">
+                ${iconHtml}
+                <span class="font-bold text-slate-800">${item.title}</span>
+              </div>
+            </td>
+            <td class="p-3 font-mono text-indigo-600 font-semibold">${item.keyword}</td>
+            <td class="p-3 text-slate-500">${item.type}</td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">${item.status}</span>
+            </td>
+            <td class="p-3 font-semibold text-slate-600">${item.duration}</td>
+            <td class="p-3 text-zinc-400 font-mono">${item.date}</td>
+            <td class="p-3 text-center flex justify-center gap-1.5">
+              <button onclick="editSimIcon('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600" title="Sửa">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              </button>
+              <button onclick="deleteSimIcon('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-red-500" title="Xóa">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      
+      const countLabel = document.getElementById('sim-icons-count-label');
+      if (countLabel) countLabel.innerText = `Hiển thị 1 - ${appIcons.length} trên tổng ${appIcons.length}`;
+    }
+
+    // 13. KEYWORDS DIRECTORY RENDER (Screenshot 13)
+    function renderKeywordsTable() {
+      filterKeywords();
+    }
+
+    function filterKeywords() {
+      const wordVal = document.getElementById('sim-search-kw-word') ? document.getElementById('sim-search-kw-word').value.toLowerCase() : '';
+      const keyVal = document.getElementById('sim-search-kw-key') ? document.getElementById('sim-search-kw-key').value.toLowerCase() : '';
+
+      const filtered = keywordsList.filter(x => {
+        const matchesCategory = x.category === currentKwCategory;
+        const matchesWord = !wordVal || x.word.toLowerCase().includes(wordVal);
+        const matchesKey = !keyVal || x.key.toLowerCase().includes(keyVal);
+        return matchesCategory && matchesWord && matchesKey;
+      });
+
+      const tbody = document.getElementById('sim-table-body-keywords');
+      if (!tbody) return;
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+          <td class="p-3 pl-4 font-bold text-slate-800 text-[11px]">${item.word}</td>
+          <td class="p-3 font-mono text-indigo-600">${item.key}</td>
+          <td class="p-3 text-center flex justify-center gap-1.5">
+            <button onclick="editSimKeyword('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-blue-600" title="Sửa">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+            <button onclick="deleteSimKeyword('${item.id}')" class="p-1 hover:bg-slate-100 rounded text-red-500" title="Xóa">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      const countLabel = document.getElementById('sim-kw-count-label');
+      if (countLabel) {
+        if (currentKwCategory === 'banned' && !wordVal && !keyVal) {
+          countLabel.innerText = `Hiển thị 1 - 20 trên tổng 152`;
+        } else {
+          countLabel.innerText = `Hiển thị 1 - ${filtered.length} trên tổng ${filtered.length}`;
+        }
+      }
+    }
+
+    function switchKeywordSubTab(cat) {
+      currentKwCategory = cat;
+      const btnBanned = document.getElementById('btn-kw-banned');
+      const btnSearch = document.getElementById('btn-kw-search');
+
+      if (cat === 'banned') {
+        btnBanned.className = "pb-2 text-xs font-bold text-blue-600 border-b-2 border-blue-600";
+        btnSearch.className = "pb-2 text-xs font-semibold text-slate-500 hover:text-slate-800";
+      } else {
+        btnSearch.className = "pb-2 text-xs font-bold text-blue-600 border-b-2 border-blue-600";
+        btnBanned.className = "pb-2 text-xs font-semibold text-slate-500 hover:text-slate-800";
+      }
+      
+      if (document.getElementById('sim-search-kw-word')) document.getElementById('sim-search-kw-word').value = '';
+      if (document.getElementById('sim-search-kw-key')) document.getElementById('sim-search-kw-key').value = '';
+      
+      renderKeywordsTable();
+    }
+
+    function addSimKeyword() {
+      openSimModal('add-keyword', 'Thêm Từ Khóa Mới');
+    }
+
+    function editSimKeyword(id) {
+      const item = keywordsList.find(x => x.id === id);
+      if (!item) return;
+      openSimModal('edit-keyword', 'Sửa Từ Khóa Hệ Thống', item);
+    }
+
+    function deleteSimKeyword(id) {
+      keywordsList = keywordsList.filter(x => x.id !== id);
+      renderKeywordsTable();
+      showToast('Đã xóa từ khóa khỏi danh mục.');
+    }
+
+
+    // 14. WINDY MAP SIMULATOR RENDER (Screenshot 14)
+    function renderWindyMapSim() {
+      document.getElementById('pin-speed-val').innerText = `${windyPin.speed} kt`;
+      document.getElementById('pin-dir-val').innerText = windyPin.direction;
+      
+      const indicator = document.getElementById('pin-arrow-indicator');
+      if (indicator) {
+        const rotations = {
+          'Nam': 'rotate(0deg)',
+          'Bắc': 'rotate(180deg)',
+          'Đông': 'rotate(270deg)',
+          'Tây': 'rotate(90deg)'
+        };
+        indicator.style.transform = rotations[windyPin.direction] || 'rotate(0deg)';
+      }
+    }
+
+    function closeWindPin() {
+      const tooltip = document.getElementById('wind-tooltip');
+      if (tooltip) {
+        tooltip.classList.add('hidden');
+      }
+      showToast('Đã đóng ghim thông số gió');
+    }
+
+    let windPlayInterval = null;
+    let windTimeHours = 13;
+    function toggleWindPlay() {
+      const btn = document.getElementById('btn-wind-play');
+      if (windPlayInterval) {
+        clearInterval(windPlayInterval);
+        windPlayInterval = null;
+        btn.innerHTML = `<svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+        showToast('Đã tạm dừng mô phỏng dòng khí');
+      } else {
+        btn.innerHTML = `<svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+        showToast('Đang phát mô phỏng dòng khí thời gian thực');
+        windPlayInterval = setInterval(() => {
+          windTimeHours = (windTimeHours + 1) % 24;
+          const timeLabel = document.getElementById('sim-wind-time-label');
+          if (timeLabel) {
+            timeLabel.innerText = `Thứ Năm 11 — ${windTimeHours.toString().padStart(2, '0')}:00`;
+          }
+        }, 1500);
+      }
+    }
+
+    function openWindPinModal(pinName) {
+      const tooltip = document.getElementById('wind-tooltip');
+      if (tooltip) {
+        tooltip.classList.remove('hidden');
+      }
+      openSimModal('edit-windpin', 'Cấu Hình Vùng Khí Gió: ' + pinName);
+    }
+
+    function exportWindData() {
+      showToast('Đã xuất file dữ liệu tọa độ khí Windy thành công!');
+    }
+
+
+    // MODAL WINDOW CONTROL ACTIONS
+    function openSimModal(action, title, item = null) {
+      currentEditItem = { action, id: item ? item.id : null };
+      document.getElementById('modal-title').innerText = title;
+      const mBody = document.getElementById('modal-body');
+
+      let formHtml = '';
+      if (action === 'add-feature') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên tính năng đặc biệt:</label>
+            <input type="text" id="m-feat-name" placeholder="Ưu đãi đền Trần..." class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+            <label class="font-bold text-slate-700 block">Key định danh:</label>
+            <input type="text" id="m-feat-key" placeholder="dentrani" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+            <label class="font-bold text-slate-700 block">Thời hạn:</label>
+            <input type="text" id="m-feat-duration" value="30 ngày" class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'edit-feature') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên tính năng đặc biệt:</label>
+            <input type="text" id="m-feat-name" value="${item.name}" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+            <label class="font-bold text-slate-700 block">Thời hạn:</label>
+            <input type="text" id="m-feat-duration" value="${item.duration}" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Trạng thái:</label>
+            <select id="m-feat-status" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option ${item.status === 'Hoạt động' ? 'selected' : ''}>Hoạt động</option>
+              <option ${item.status === 'Tạm khóa' ? 'selected' : ''}>Tạm khóa</option>
+            </select>
+          </div>`;
+      } else if (action === 'edit-general') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">${item.key}</label>
+            <input type="text" id="m-gen-val" value="${item.value}" class="w-full bg-white border border-slate-200 rounded p-2 font-bold text-slate-800 text-xs">
+          </div>`;
+      } else if (action === 'add-item') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên hiển thị menu:</label>
+            <input type="text" id="m-item-name" placeholder="Rút quẻ Đền Trần..." class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+          </div>`;
+      } else if (action === 'edit-item') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên hiển thị menu:</label>
+            <input type="text" id="m-item-name" value="${item.name}" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+          </div>`;
+      } else if (action === 'add-advanced') {
+        formHtml = `
+          <div class="space-y-2.5 text-xs text-[#475569]">
+            <label class="font-bold text-slate-700 block">Tên tính năng nâng cao:</label>
+            <input type="text" id="m-adv-name" placeholder="Bản đồ phong thủy..." class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+            <label class="font-bold text-slate-700 block">Key định danh:</label>
+            <input type="text" id="m-adv-key" placeholder="event-map" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+            <label class="font-bold text-slate-700 block">Quyền truy cập mặc định:</label>
+            <select id="m-adv-accesstype" onchange="changeModalAdvancedAccess(this.value)" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+              <option value="restricted">Không cho phép</option>
+              <option value="allowed">Cho phép (Vĩnh viễn)</option>
+              <option value="temporary">Cho phép (Thời hạn)</option>
+            </select>
+            <div id="m-adv-date-container" class="hidden space-y-2">
+              <label class="font-bold text-slate-700 block">Ngày hết hạn:</label>
+              <input type="date" id="m-adv-expirydate" class="w-full bg-white border border-slate-200 rounded p-2 font-mono focus:outline-none">
+            </div>
+          </div>`;
+      } else if (action === 'edit-advanced') {
+        const isTemp = item.accessType === 'temporary';
+        formHtml = `
+          <div class="space-y-2.5 text-xs text-[#475569]">
+            <label class="font-bold text-slate-700 block">Tên tính năng nâng cao:</label>
+            <input type="text" id="m-adv-name" value="${item.name}" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+            <label class="font-bold text-slate-700 block">Quyền truy cập mặc định:</label>
+            <select id="m-adv-accesstype" onchange="changeModalAdvancedAccess(this.value)" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+              <option value="restricted" ${item.accessType === 'restricted' ? 'selected' : ''}>Không cho phép</option>
+              <option value="allowed" ${item.accessType === 'allowed' ? 'selected' : ''}>Cho phép (Vĩnh viễn)</option>
+              <option value="temporary" ${item.accessType === 'temporary' ? 'selected' : ''}>Cho phép (Thời hạn)</option>
+            </select>
+            <div id="m-adv-date-container" class="${isTemp ? '' : 'hidden'} space-y-2">
+              <label class="font-bold text-slate-700 block">Ngày hết hạn:</label>
+              <input type="date" id="m-adv-expirydate" value="${item.expiryDate || ''}" class="w-full bg-white border border-slate-200 rounded p-2 font-mono focus:outline-none">
+            </div>
+          </div>`;
+      } else if (action === 'add-resource') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề bài hướng dẫn:</label>
+            <input type="text" id="m-res-title" placeholder="Hướng dẫn xem tuổi..." class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Loại:</label>
+            <input type="text" id="m-res-type" value="ptdn" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+          </div>`;
+      } else if (action === 'edit-resource') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề bài hướng dẫn:</label>
+            <input type="text" id="m-res-title" value="${item.title}" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Loại:</label>
+            <input type="text" id="m-res-type" value="${item.type}" class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'add-lakinh') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề luận giải:</label>
+            <input type="text" id="m-lk-title" placeholder="Giải nghĩa hướng Đông..." class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Hướng gió:</label>
+            <select id="m-lk-wind" class="w-full bg-white border border-slate-200 rounded p-2"><option>Đông</option><option>Tây</option><option>Nam</option><option>Bắc</option></select>
+          </div>`;
+      } else if (action === 'edit-lakinh') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề luận giải:</label>
+            <input type="text" id="m-lk-title" value="${item.title}" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Hướng gió:</label>
+            <select id="m-lk-wind" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option ${item.wind === 'Đông' ? 'selected' : ''}>Đông</option>
+              <option ${item.wind === 'Tây' ? 'selected' : ''}>Tây</option>
+              <option ${item.wind === 'Nam' ? 'selected' : ''}>Nam</option>
+              <option ${item.wind === 'Bắc' ? 'selected' : ''}>Bắc</option>
+            </select>
+          </div>`;
+      } else if (action === 'add-banner') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề Banner:</label>
+            <input type="text" id="m-b-title" placeholder="Xem Livestream 2026..." class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Link liên kết:</label>
+            <input type="text" id="m-b-url" value="https://phongthuydainam.vn" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+          </div>`;
+      } else if (action === 'edit-banner') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề Banner:</label>
+            <input type="text" id="m-b-title" value="${item.title}" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Link liên kết:</label>
+            <input type="text" id="m-b-url" value="${item.url}" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+          </div>`;
+      } else if (action === 'add-prayer') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề văn khấn:</label>
+            <input type="text" id="m-p-title" placeholder="Văn khấn..." class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'edit-prayer') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tiêu đề văn khấn:</label>
+            <input type="text" id="m-p-title" value="${item.title}" class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'add-prayercat') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên danh mục:</label>
+            <input type="text" id="m-pc-title" placeholder="Nghi lễ..." class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Mô tả:</label>
+            <input type="text" id="m-pc-desc" placeholder="Cúng giỗ..." class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'edit-prayercat') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên danh mục:</label>
+            <input type="text" id="m-pc-title" value="${item.title}" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Mô tả:</label>
+            <input type="text" id="m-pc-desc" value="${item.desc}" class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'add-template') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Tên mẫu ảnh:</label>
+            <input type="text" id="m-tpl-name" placeholder="Mẫu khung sơn son..." class="w-full bg-white border border-slate-200 rounded p-2">
+          </div>`;
+      } else if (action === 'add-icon') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Từ khóa gán Icon:</label>
+            <input type="text" id="m-ic-kw" placeholder="zalo-link" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+            <label class="font-bold text-slate-700 block">Phân loại:</label>
+            <input type="text" id="m-ic-type" value="Thông báo" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Thời hạn:</label>
+            <select id="m-ic-dur" class="w-full bg-white border border-slate-200 rounded p-2"><option>Vĩnh viễn</option><option>Thời hạn</option></select>
+          </div>`;
+      } else if (action === 'edit-icon') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Từ khóa gán Icon:</label>
+            <input type="text" id="m-ic-kw" value="${item.keyword}" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+            <label class="font-bold text-slate-700 block">Trạng Thái:</label>
+            <select id="m-ic-status" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option ${item.status === 'Hoạt động' ? 'selected' : ''}>Hoạt động</option>
+              <option ${item.status === 'Khóa' ? 'selected' : ''}>Khóa</option>
+            </select>
+          </div>`;
+      } else if (action === 'edit-keyword') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Từ Khóa:</label>
+            <input type="text" id="m-kw-word" value="${item.word}" class="w-full bg-white border border-slate-200 rounded p-2">
+            <label class="font-bold text-slate-700 block">Key:</label>
+            <input type="text" id="m-kw-key" value="${item.key}" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+          </div>`;
+      } else if (action === 'edit-windpin') {
+        formHtml = `
+          <div class="space-y-2.5">
+            <label class="font-bold text-slate-700 block">Vận tốc gió (Knots - kt):</label>
+            <input type="number" id="m-wind-speed" value="${windyPin.speed}" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+            <label class="font-bold text-slate-700 block">Hướng gió thổi:</label>
+            <select id="m-wind-dir" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option ${windyPin.direction === 'Nam' ? 'selected' : ''}>Nam</option>
+              <option ${windyPin.direction === 'Bắc' ? 'selected' : ''}>Bắc</option>
+              <option ${windyPin.direction === 'Đông' ? 'selected' : ''}>Đông</option>
+              <option ${windyPin.direction === 'Tây' ? 'selected' : ''}>Tây</option>
+            </select>
+          </div>`;
+      } else if (action === 'add-vip') {
+        const chkBoxesHtml = advancedFeatures.map(f => `
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" class="m-vip-p-sub" value="${f.key}" disabled> ${f.name}
+          </label>
+        `).join('');
+
+        formHtml = `
+          <div class="space-y-2.5 text-xs text-[#475569]">
+            <label class="font-bold text-slate-700 block">Họ và tên:</label>
+            <input type="text" id="m-vip-name" placeholder="Nguyễn Văn A" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+            <label class="font-bold text-slate-700 block">Số điện thoại:</label>
+            <input type="text" id="m-vip-phone" placeholder="84912345678" class="w-full bg-white border border-slate-200 rounded p-2 font-mono">
+            <label class="font-bold text-slate-700 block">Trạng thái VIP:</label>
+            <select id="m-vip-isvip" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option value="true">Kích hoạt isVIP</option>
+              <option value="false">Không kích hoạt</option>
+            </select>
+            <label class="font-bold text-slate-700 block">Quyền hạn tuỳ chỉnh:</label>
+            <div class="grid grid-cols-2 gap-2 pt-1 border border-slate-100 p-2.5 rounded bg-slate-50">
+              <label class="flex items-center gap-1.5 cursor-pointer font-semibold col-span-2 pb-1 border-b border-slate-200/60">
+                <input type="checkbox" id="m-vip-p-all" value="ALL" checked onchange="toggleVipPermissionsModal(this)"> Full quyền (ALL)
+              </label>
+              ${chkBoxesHtml}
+            </div>
+          </div>`;
+      } else if (action === 'edit-vip') {
+        const isAll = item.customPermissions.includes('ALL');
+        const chkBoxesHtml = advancedFeatures.map(f => {
+          const isChecked = !isAll && item.customPermissions.includes(f.key);
+          return `
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" class="m-vip-p-sub" value="${f.key}" ${isChecked ? 'checked' : ''} ${isAll ? 'disabled' : ''}> ${f.name}
+            </label>
+          `;
+        }).join('');
+
+        formHtml = `
+          <div class="space-y-2.5 text-xs text-[#475569]">
+            <label class="font-bold text-slate-700 block">Họ và tên:</label>
+            <input type="text" id="m-vip-name" value="${item.name}" class="w-full bg-white border border-slate-200 rounded p-2 focus:outline-none">
+            <label class="font-bold text-slate-700 block">Số điện thoại (Không sửa):</label>
+            <input type="text" id="m-vip-phone" value="${item.phone}" readonly class="w-full bg-slate-50 border border-slate-200 rounded p-2 font-mono text-slate-500">
+            <label class="font-bold text-slate-700 block">Trạng thái VIP:</label>
+            <select id="m-vip-isvip" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option value="true" ${item.isVip ? 'selected' : ''}>Kích hoạt isVIP</option>
+              <option value="false" ${!item.isVip ? 'selected' : ''}>Không kích hoạt</option>
+            </select>
+            <label class="font-bold text-slate-700 block">Quyền hạn tuỳ chỉnh:</label>
+            <div class="grid grid-cols-2 gap-2 pt-1 border border-slate-100 p-2.5 rounded bg-slate-50">
+              <label class="flex items-center gap-1.5 cursor-pointer font-semibold col-span-2 pb-1 border-b border-slate-200/60">
+                <input type="checkbox" id="m-vip-p-all" value="ALL" ${isAll ? 'checked' : ''} onchange="toggleVipPermissionsModal(this)"> Full quyền (ALL)
+              </label>
+              ${chkBoxesHtml}
+            </div>
+            <label class="font-bold text-slate-700 block">Trạng thái hoạt động:</label>
+            <select id="m-vip-status" class="w-full bg-white border border-slate-200 rounded p-2">
+              <option ${item.status === 'Hoạt động' ? 'selected' : ''}>Hoạt động</option>
+              <option ${item.status === 'Tạm khóa' ? 'selected' : ''}>Tạm khóa</option>
+            </select>
+          </div>`;
+      }
+
+      mBody.innerHTML = formHtml;
+      document.getElementById('sim-modal').classList.remove('hidden');
+    }
+
+    function closeSimModal() {
+      document.getElementById('sim-modal').classList.add('hidden');
+      currentEditItem = null;
+    }
+
+    function saveSimModal() {
+      if (!currentEditItem) return;
+
+      const act = currentEditItem.action;
+
+      if (act === 'add-feature') {
+        const nameVal = document.getElementById('m-feat-name').value.trim();
+        const keyVal = document.getElementById('m-feat-key').value.trim();
+        const durVal = document.getElementById('m-feat-duration').value.trim();
+
+        if (nameVal && keyVal) {
+          specialFeatures.push({
+            id: Date.now().toString(),
+            name: nameVal,
+            key: keyVal,
+            duration: durVal || '30 ngày',
+            status: 'Hoạt động',
+            date: '11/06/2026'
+          });
+          showToast('Đã thêm mới tính năng đặc biệt.');
+        }
+      } else if (act === 'edit-feature') {
+        const item = specialFeatures.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.name = document.getElementById('m-feat-name').value;
+          item.duration = document.getElementById('m-feat-duration').value;
+          item.status = document.getElementById('m-feat-status').value;
+          showToast('Cập nhật thành công tính năng đặc biệt.');
+        }
+      } else if (act === 'edit-general') {
+        const item = generalConfigs.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.value = document.getElementById('m-gen-val').value;
+          showToast('Cập nhật tham số hệ thống.');
+        }
+      } else if (act === 'add-item') {
+        const nameVal = document.getElementById('m-item-name').value.trim();
+
+        if (nameVal) {
+          appMenuItems.push({
+            id: Date.now().toString(),
+            name: nameVal,
+            iconSvg: `<svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8"/></svg>`
+          });
+          showToast('Đã khởi tạo phím tắt menu mới.');
+        }
+      } else if (act === 'edit-item') {
+        const item = appMenuItems.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.name = document.getElementById('m-item-name').value;
+          showToast('Đã sửa tên tiện ích menu.');
+        }
+      } else if (act === 'add-advanced') {
+        const nameVal = document.getElementById('m-adv-name').value.trim();
+        const keyVal = document.getElementById('m-adv-key').value.trim();
+        const accessType = document.getElementById('m-adv-accesstype').value;
+        const expiryDate = accessType === 'temporary' ? document.getElementById('m-adv-expirydate').value : '';
+
+        if (nameVal && keyVal) {
+          advancedFeatures.push({
+            id: Date.now().toString(),
+            name: nameVal,
+            key: keyVal,
+            accessType: accessType,
+            expiryDate: expiryDate,
+            status: 'Hoạt động',
+            date: '11/06/2026'
+          });
+          showToast('Đã thêm modul nâng cao mới.');
+        }
+      } else if (act === 'edit-advanced') {
+        const item = advancedFeatures.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.name = document.getElementById('m-adv-name').value;
+          item.accessType = document.getElementById('m-adv-accesstype').value;
+          item.expiryDate = item.accessType === 'temporary' ? document.getElementById('m-adv-expirydate').value : '';
+          showToast('Cập nhật nâng cao thành công.');
+        }
+      } else if (act === 'add-resource') {
+        const titleVal = document.getElementById('m-res-title').value.trim();
+        const typeVal = document.getElementById('m-res-type').value.trim();
+
+        if (titleVal) {
+          appResources.push({
+            id: Date.now().toString(),
+            title: titleVal,
+            type: typeVal || 'ptdn',
+            status: 'Hoạt động',
+            creator: '84981754134',
+            date: '11/06/2026'
+          });
+          showToast('Thêm hướng dẫn AI.');
+        }
+      } else if (act === 'edit-resource') {
+        const item = appResources.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.title = document.getElementById('m-res-title').value;
+          item.type = document.getElementById('m-res-type').value;
+          showToast('Đã sửa tài liệu AI.');
+        }
+      } else if (act === 'add-lakinh') {
+        const titleVal = document.getElementById('m-lk-title').value.trim();
+        const windVal = document.getElementById('m-lk-wind').value;
+
+        if (titleVal) {
+          laKinhInterpretations.push({
+            id: Date.now().toString(),
+            title: titleVal,
+            wind: windVal,
+            status: 'Hoạt động',
+            date: '11/06/2026',
+            creator: '84395209816'
+          });
+          showToast('Đã thêm luận giải la kinh.');
+        }
+      } else if (act === 'edit-lakinh') {
+        const item = laKinhInterpretations.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.title = document.getElementById('m-lk-title').value;
+          item.wind = document.getElementById('m-lk-wind').value;
+          showToast('Đã lưu luận giải la kinh.');
+        }
+      } else if (act === 'add-banner') {
+        const titleVal = document.getElementById('m-b-title').value.trim();
+        const urlVal = document.getElementById('m-b-url').value.trim();
+
+        if (titleVal) {
+          banners.push({
+            id: Date.now().toString(),
+            title: titleVal,
+            url: urlVal || 'https://download.xheroapp.com/',
+            position: 'Màn hình chính',
+            lang: 'Tiếng Việt',
+            priority: banners.length + 1,
+            status: 'Hoạt động',
+            duration: '25/05/2026 - 31/12/2026'
+          });
+          showToast('Đã thêm banner.');
+        }
+      } else if (act === 'edit-banner') {
+        const item = banners.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.title = document.getElementById('m-b-title').value;
+          item.url = document.getElementById('m-b-url').value;
+          showToast('Đã sửa banner.');
+        }
+      } else if (act === 'add-prayer') {
+        const titleVal = document.getElementById('m-p-title').value.trim();
+
+        if (titleVal) {
+          prayers.push({
+            id: Date.now().toString(),
+            title: titleVal,
+            cat: 'Nghi lễ gia đình',
+            views: 0,
+            isPopular: 'Không',
+            status: 'Hoạt động',
+            date: '11/06/2026'
+          });
+          showToast('Đã tạo văn khấn mới.');
+        }
+      } else if (act === 'edit-prayer') {
+        const item = prayers.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.title = document.getElementById('m-p-title').value;
+          showToast('Đã lưu bài văn khấn.');
+        }
+      } else if (act === 'add-prayercat') {
+        const titleVal = document.getElementById('m-pc-title').value.trim();
+        const descVal = document.getElementById('m-pc-desc').value.trim();
+
+        if (titleVal) {
+          prayerCategories.push({
+            id: Date.now().toString(),
+            title: titleVal,
+            desc: descVal || 'Chi tiết...',
+            priority: prayerCategories.length + 1,
+            status: 'Hoạt động',
+            date: '11/06/2026'
+          });
+          showToast('Đã tạo danh mục văn khấn mới.');
+        }
+      } else if (act === 'edit-prayercat') {
+        const item = prayerCategories.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.title = document.getElementById('m-pc-title').value;
+          item.desc = document.getElementById('m-pc-desc').value;
+          showToast('Đã cập nhật danh mục văn khấn.');
+        }
+      } else if (act === 'add-template') {
+        showToast('Đã thêm khung ảnh phả đồ trống vào hệ thống.');
+      } else if (act === 'add-icon') {
+        const kwVal = document.getElementById('m-ic-kw').value.trim();
+        const typeVal = document.getElementById('m-ic-type').value.trim();
+        const durVal = document.getElementById('m-ic-dur').value;
+
+        if (kwVal) {
+          appIcons.push({
+            id: Date.now().toString(),
+            url: 'https://cdn.xhero.com/new.png',
+            keyword: kwVal,
+            type: typeVal || 'Thông báo',
+            status: 'Hoạt động',
+            duration: durVal,
+            date: '11/06/2026'
+          });
+          showToast('Tải lên Icon thành công.');
+        }
+      } else if (act === 'edit-icon') {
+        const item = appIcons.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.keyword = document.getElementById('m-ic-kw').value;
+          item.status = document.getElementById('m-ic-status').value;
+          showToast('Đã sửa biểu tượng.');
+        }
+      } else if (act === 'edit-keyword') {
+        const item = keywordsList.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.word = document.getElementById('m-kw-word').value;
+          item.key = document.getElementById('m-kw-key').value;
+          showToast('Đã chỉnh sửa từ khóa.');
+        }
+      } else if (act === 'edit-windpin') {
+        windyPin.speed = parseInt(document.getElementById('m-wind-speed').value) || 0;
+        windyPin.direction = document.getElementById('m-wind-dir').value;
+        showToast('Đã cập nhật vận tốc & hướng gió vùng khí!');
+      } else if (act === 'add-vip') {
+        const nameVal = document.getElementById('m-vip-name').value.trim();
+        const phoneVal = document.getElementById('m-vip-phone').value.trim();
+        const isVipVal = document.getElementById('m-vip-isvip').value === 'true';
+        const isAll = document.getElementById('m-vip-p-all').checked;
+        const customPermissions = [];
+        if (isAll) {
+          customPermissions.push('ALL');
+        } else {
+          document.querySelectorAll('.m-vip-p-sub:checked').forEach(c => {
+            customPermissions.push(c.value);
+          });
+        }
+
+        if (nameVal && phoneVal) {
+          vipAccounts.push({
+            id: Date.now().toString(),
+            name: nameVal,
+            phone: phoneVal,
+            isVip: isVipVal,
+            customPermissions: customPermissions,
+            status: 'Hoạt động'
+          });
+          showToast('Đã thêm mới tài khoản VIP.');
+        }
+      } else if (act === 'edit-vip') {
+        const item = vipAccounts.find(x => x.id === currentEditItem.id);
+        if (item) {
+          item.name = document.getElementById('m-vip-name').value;
+          item.isVip = document.getElementById('m-vip-isvip').value === 'true';
+          item.status = document.getElementById('m-vip-status').value;
+          
+          const isAll = document.getElementById('m-vip-p-all').checked;
+          const customPermissions = [];
+          if (isAll) {
+            customPermissions.push('ALL');
+          } else {
+            document.querySelectorAll('.m-vip-p-sub:checked').forEach(c => {
+              customPermissions.push(c.value);
+            });
+          }
+          item.customPermissions = customPermissions;
+          showToast('Cập nhật thông tin tài khoản VIP thành công.');
+        }
+      }
+
+      closeSimModal();
+      refreshSimWorkspace();
+    }
+
+
+
+    // window toast feedback loader
+    function showToast(msg) {
+      const toast = document.getElementById('sim-toast');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.className = 'mt-4 p-3 rounded-xl text-center text-xs font-bold bg-green-50 border border-green-200 text-green-700 shadow-sm transition-all duration-300';
+      toast.classList.remove('hidden');
+
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    window.onload = function() {
+      setUpgradeTab('features');
+    }
+  </script>
+</body>
+
+</html>
